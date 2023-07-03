@@ -11,7 +11,7 @@ var accessor = function(d){
     };
 }
 
-d3.csv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv", accessor, function(nations) {
+d3.csv("http://alackles.github.io/D3-visualising-data/resources/nations.csv", accessor, function(nations) {
 	var filtered_nations = nations.map(function(nation) { return nation;});
 	var year = parseInt(document.getElementById("year_slider").value);
 

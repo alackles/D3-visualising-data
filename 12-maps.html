@@ -44,8 +44,8 @@ var map_height = 150;</code></pre>
 <pre class="js"><code>var upper_x = canvas_width - map_width;
 var upper_y = canvas_height - map_height;
 map_canvas.attr(&quot;transform&quot;, &quot;translate(&quot; + upper_x + &quot;,&quot; + upper_y + &quot;)&quot; );    </code></pre>
-<p>Okay, great. Now we need to get some data telling us what the continents on earth actually look like. The easiest format to use this data in is <code>.json</code>. JSON stands for JavaScript Object Notation, and it looks exactly like Javascript objects that we've already seen. Technically, the file that we're going to use here is in <code>[TopoJSON](https://github.com/mbostock/topojson)</code> format, which allows for easy description of geographic shapes. A JSON file containing outlines for all of the continents is available <a href="http://emilydolson.github.io/D3-visualising-data/resources/continents.json">here</a>. We can load this file with the <code>d3.json()</code> function, which works just like <code>d3.csv()</code> except that it loads a JSON file:</p>
-<pre class="js"><code>d3.json(&quot;http://emilydolson.github.io/D3-visualising-data/resources/continents.json&quot;, function(continent_data) {
+<p>Okay, great. Now we need to get some data telling us what the continents on earth actually look like. The easiest format to use this data in is <code>.json</code>. JSON stands for JavaScript Object Notation, and it looks exactly like Javascript objects that we've already seen. Technically, the file that we're going to use here is in <code>[TopoJSON](https://github.com/mbostock/topojson)</code> format, which allows for easy description of geographic shapes. A JSON file containing outlines for all of the continents is available <a href="http://alackles.github.io/D3-visualising-data/resources/continents.json">here</a>. We can load this file with the <code>d3.json()</code> function, which works just like <code>d3.csv()</code> except that it loads a JSON file:</p>
+<pre class="js"><code>d3.json(&quot;http://alackles.github.io/D3-visualising-data/resources/continents.json&quot;, function(continent_data) {
 //All of our map stuff happens here
 }</code></pre>
 <p>This file contains an array of five <code>FeatureCollection</code> objects. D3 understands how to convert these objects into paths, so we don't need to worry too much about their contents. We can just bind them to a selection like we did before:</p>
@@ -124,11 +124,11 @@ var path = d3.geo.path().projection(projection);</code></pre>
 <h1><span class="glyphicon glyphicon-pencil"></span>More practice with maps!</h1>
 </div>
 <div class="panel-body">
-<p>A json file describing the shapes of all of the countries (as of 2015) is available at http://emilydolson.github.io/D3-visualising-data/resources/countries.json. See if you can use it to make a map that shows the countries.</p>
+<p>A json file describing the shapes of all of the countries (as of 2015) is available at http://alackles.github.io/D3-visualising-data/resources/countries.json. See if you can use it to make a map that shows the countries.</p>
 </div>
 </div>
 <p>By the end of this lesson, your page should look something like this:</p>
-<iframe src="http://emilydolson.github.io/D3-visualising-data/code/index11.html" width="1000" height="600"></iframe>
+<iframe src="http://alackles.github.io/D3-visualising-data/code/index11.html" width="1000" height="600"></iframe>
 
 <p>The continents.json file was generated based on the code for <a href="http://techslides.com/continents-and-map-projections-with-d3-js">this map projection explorer</a></p>
         </div>

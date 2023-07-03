@@ -46,11 +46,11 @@ Technically, the file that we're going to use here is in
 `[TopoJSON](https://github.com/mbostock/topojson)` format, which allows for easy
 description of geographic shapes. A JSON file containing outlines for all of 
 the continents is available 
-[here](http://emilydolson.github.io/D3-visualising-data/resources/continents.json). We can load this file with the `d3.json()` function, which works
+[here](http://alackles.github.io/D3-visualising-data/resources/continents.json). We can load this file with the `d3.json()` function, which works
 just like `d3.csv()` except that it loads a JSON file:
 
 ~~~{.js}
-d3.json("http://emilydolson.github.io/D3-visualising-data/resources/continents.json", function(continent_data) {
+d3.json("http://alackles.github.io/D3-visualising-data/resources/continents.json", function(continent_data) {
 //All of our map stuff happens here
 }
 ~~~
@@ -191,12 +191,12 @@ Ta-da!
 > # More practice with maps! {.challenge}
 > A json file describing the shapes of all of the countries (as of 2015) is
 > available at
-> http://emilydolson.github.io/D3-visualising-data/resources/countries.json.
+> http://alackles.github.io/D3-visualising-data/resources/countries.json.
 > See if you can use it to make a map that shows the countries.
 
 By the end of this lesson, your page should look something like this:
 
-<iframe src="http://emilydolson.github.io/D3-visualising-data/code/index11.html" width="1000" height="600"></iframe>
+<iframe src="http://alackles.github.io/D3-visualising-data/code/index11.html" width="1000" height="600"></iframe>
 
 The continents.json file was generated based on the code for 
 [this map projection explorer](http://techslides.com/continents-and-map-projections-with-d3-js)

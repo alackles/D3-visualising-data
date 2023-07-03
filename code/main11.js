@@ -112,7 +112,7 @@ var accessor = function(d){
     };
 }
 
-d3.csv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv", accessor)
+d3.csv("http://alackles.github.io/D3-visualising-data/resources/nations.csv", accessor)
 	.then(function(nations) {
 
     //Initialize variables:
@@ -188,7 +188,7 @@ d3.csv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv",
 	.scale( map_width / 2 / Math.PI);
     var path = d3.geo.path().projection(projection);
 
-    d3.json("http://emilydolson.github.io/D3-visualising-data/resources/continents.json", function(outlines) {
+    d3.json("http://alackles.github.io/D3-visualising-data/resources/continents.json", function(outlines) {
     
 	var continents = map_canvas.selectAll(".continent").data(outlines);
     

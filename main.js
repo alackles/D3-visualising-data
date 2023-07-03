@@ -52,7 +52,7 @@ var accessor = function(row){
 }
 
 
-d3.csv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv", 
+d3.csv("http://alackles.github.io/D3-visualising-data/resources/nations.csv", 
     accessor
     ).then(
         function(nations) {

@@ -33,7 +33,7 @@ Create `index.html` containing the following:
 
     <div id="chart_area"></div>
 
-    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://d3js.org/d3.v5.min.js"></script>
     <script src="main.js"></script>
   </body>
 </html>
@@ -50,17 +50,17 @@ Now, let's write main.js.
 
 D3-specific functions can be called using a `d3.`-syntax.
 
-The first thing we need, is of course our data, which is stored at 'http://emilydolson.github.io/D3-visualising-data/resources/nations.csv'.
+The first thing we need, is of course our data, which is stored at 'http://alackles.github.io/D3-visualising-data/resources/nations.csv'.
 D3 provides a handy function to read in `csv`-files:
 
 ~~~{.d3}
-d3.csv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv").then(function(nations){ })
+d3.csv("http://alackles.github.io/D3-visualising-data/resources/nations.csv").then(function(nations){ })
 ~~~
 
 This line probably needs a little explanation and we'll go through it bit by bit: 
 
 * `d3.csv()` is called the function call. In this case, we have a function that reads in a json file, parses it, and is also able to do something with the parsed data on the way.
-* The argument `"http://emilydolson.github.io/D3-visualising-data/resources/nations.csv"` tells the function where to get the data we want to have parsed.
+* The argument `"http://alackles.github.io/D3-visualising-data/resources/nations.csv"` tells the function where to get the data we want to have parsed.
 * `.then()` tells d3 to load the data in `d3.csv()` first, and then apply any manipulations we specify afterwards. 
 * `function(nations) {...}` is called the callback function. It is a so-called 'inline' function, which means it has no name (we're only operating in the object space here). This also means we can't use this function anywhere else in our code. 
 * The code we put inside the curly brackets is the code that's run once d3.json() is called and the data is loaded.
@@ -100,7 +100,7 @@ The `+` signs tell Javascript to interpret that variable as a number. We can
 stick this into the call to the `d3.csv()` function as the second argument:
 
 ~~~{.js}
-d3.csv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv", accessor).
+d3.csv("http://alackles.github.io/D3-visualising-data/resources/nations.csv", accessor).
   then(function) {
    //Awesome visualizations here!
   }

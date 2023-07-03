@@ -88,7 +88,7 @@ update selections:
 function update() {
   var circles = data_canvas.selectAll("circle").data(filtered_nations, function(d){return d.country});
 
-  circles.enter().append("circle").meerge().attr("class","data_point");
+  circles.enter().append("circle").merge().attr("class","data_point");
 
   circles.exit().remove();
 
@@ -117,4 +117,4 @@ In order to create the plot when we first load the page, we will also have to ca
 
 By the end of this lesson, your page should look something like this:
 
-<iframe src="http://emilydolson.github.io/D3-visualising-data/code/index09.html" width="1000" height="600"></iframe>
+<iframe src="http://alackles.github.io/D3-visualising-data/code/index09.html" width="1000" height="600"></iframe>

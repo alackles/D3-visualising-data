@@ -11,7 +11,7 @@ var accessor = function(d){
     };
 }
 
-d3.csv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv", accessor, function(nations) {
+d3.csv("http://alackles.github.io/D3-visualising-data/resources/nations.csv", accessor, function(nations) {
 
 	// Create the SVG frame inside chart_area.
 	var chart_area = d3.select("#chart_area");
