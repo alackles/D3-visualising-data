@@ -45,10 +45,10 @@ d3.select("#year_slider").on("input", function () {
 	filtered_nations = nations.filter(function(nation){
 		//Grab the checkbox corresponding to this country
 		var checkbox = d3.selectAll(".region_cb")[0].filter(
-			function(cb){return cb.value == nation.continent})[0];
+			function(cb){return this.value == nation.continent})[0];
 
 		//If the checkbox is checked, see if the year matches
-		if (checkbox.checked){		
+		if (checkbox.property("checked")){		
 			 return(nation.year==year)
 		} else {
 		       //Otherwise it doesn't matter what the year is
