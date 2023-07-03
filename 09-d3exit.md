@@ -88,7 +88,7 @@ update selections:
 function update() {
   var circles = data_canvas.selectAll("circle").data(filtered_nations, function(d){return d.country});
 
-  circles.enter().append("circle").attr("class","data_point");
+  circles.enter().append("circle").meerge().attr("class","data_point");
 
   circles.exit().remove();
 

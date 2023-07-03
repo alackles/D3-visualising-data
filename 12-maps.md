@@ -73,6 +73,7 @@ eccentricities of geographic data:
 
 ~~~{.js}
 continents.enter().append("path")
+	.merge()
 	.attr("class", "continent")
 	.attr("d", d3.geo.path())
 	.attr("name", function(d) {return d.name;}
@@ -107,6 +108,7 @@ the continent paths:
 
 ~~~{.js}
 continents.enter().append("path")
+	.merge()
 	.attr("class", "continent")
 	.attr("d", path)
 	.attr("name", function(d) {return d.name;}
