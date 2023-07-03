@@ -54,15 +54,15 @@ The first thing we need, is of course our data, which is stored at 'http://emily
 D3 provides a handy function to read in `csv`-files:
 
 ~~~{.d3}
-d3.csv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv").then(function){ } 
+d3.csv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv").then(function(nations){ })
 ~~~
 
 This line probably needs a little explanation and we'll go through it bit by bit: 
 
 * `d3.csv()` is called the function call. In this case, we have a function that reads in a json file, parses it, and is also able to do something with the parsed data on the way.
 * The argument `"http://emilydolson.github.io/D3-visualising-data/resources/nations.csv"` tells the function where to get the data we want to have parsed.
-* `.then` tells d3 to load the data in `d3.csv()` first, and then apply any manipulations we specify afterwards. 
-* `.then(function) {...}` as a whole is called the callback function. It is a so-called 'inline' function, which means it has no name (we're only operating in the object space here). This also means we can't use this function anywhere else in our code. 
+* `.then()` tells d3 to load the data in `d3.csv()` first, and then apply any manipulations we specify afterwards. 
+* `function(nations) {...}` is called the callback function. It is a so-called 'inline' function, which means it has no name (we're only operating in the object space here). This also means we can't use this function anywhere else in our code. 
 * The code we put inside the curly brackets is the code that's run once d3.json() is called and the data is loaded.
 * D3 assigns the name `nations` to the parsed object it returns. We can only use 'nations' within the callback function, this means our code only knows of `nations` inside the curly brackets. This means most of our visualization code will need to go inside the curly brackets.
 * What seems unusual, but is actually quite common, is that this function call doesn't return anything. It is simply executed and displayed (if we tell it to), but no value is returned. 

@@ -112,7 +112,8 @@ var accessor = function(d){
     };
 }
 
-d3.csv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv", accessor, function(nations) {
+d3.csv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv", accessor)
+	.then(function(nations) {
 
     //Initialize variables:
     var year = parseInt(String(document.getElementById("year_slider").value));
@@ -164,7 +165,7 @@ d3.csv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv",
 	var circles = data_canvas.selectAll("circle")  // magic! 
 	    .data(filtered_nations, function(d){return d.country});
 
-	circles.enter().append("circle").attr("class","data_point")
+	circles.enter().append("circle").merge().attr("class","data_point")
 	    .style("fill", function(d) { return colorScale(d.continent); })
 	    .on("mouseover", tip.show)
 	    .on("mouseout", tip.hide);
@@ -192,6 +193,7 @@ d3.csv("http://emilydolson.github.io/D3-visualising-data/resources/nations.csv",
 	var continents = map_canvas.selectAll(".continent").data(outlines);
     
 	continents.enter().append("path")
+		.merge()
 	    .attr("class", "continent")
 	    .attr("d", path)
 	    .attr("name", function(d) { return d.name; })
