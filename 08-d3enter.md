@@ -88,6 +88,7 @@ var circles = data_canvas.selectAll("circle")
   .data(nations, function(d){return d.country});
 
 circles.enter().append("circle").attr("class","data_point")
+  .merge(circles)
 	.attr("cx", function(d) { return xScale(d.gdpPercap); }) 
 	.attr("cy", function(d) { return yScale(d.lifeExp); })
 	.attr("r", 5);
@@ -103,6 +104,8 @@ We are also inserting what is called a key function `.data(nations, function(d){
 
 Now comes the interesting part:
 The function `enter()` takes each element in the dataset and does everything that follows afterwards for each of these elements we're adding in. These new circles need to be added with the class 'data_point', so that next time we call `data_canvas.selectAll(".data_point")` we get the circles that have already been added to our plot.
+
+We then need to make sure we are operating on each individual element in our selection (in this case, the circles) instead of operating on the selection as a group. To accomplish this, we manually "merge" all the datapoints that we have just added into our class with `.merge(circles)`.
 
 What we want to do is to create one circle for each data point. That's
 what the last four lines of code do. They are creating the circle, and then setting 
