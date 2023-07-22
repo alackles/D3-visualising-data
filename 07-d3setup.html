@@ -92,9 +92,12 @@
     };
 }</code></pre>
 <p>The <code>+</code> signs tell Javascript to interpret that variable as a number. We can stick this into the call to the <code>d3.csv()</code> function as the second argument:</p>
-<pre class="js"><code>d3.csv(&quot;http://alackles.github.io/D3-visualising-data/resources/nations.csv&quot;, accessor, function(nations){
+<pre class="js"><code>
+d3.csv("http://alackles.github.io/D3-visualising-data/resources/nations.csv", accessor).
+  then(function) {
    //Awesome visualizations here!
-}</code></pre>
+  }
+</code></pre>
 <p>So naturally, the next step is to think about what we want to happen between the curly brackets. For now, we want to:</p>
 <ul>
 <li>Link JavaScript to HTML page</li>
