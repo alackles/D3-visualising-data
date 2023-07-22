@@ -19,65 +19,125 @@
   <body class="lesson">
     <div class="container card">
       <div class="banner">
+        <a href="http://software-carpentry.org" title="Software Carpentry">
+          <img alt="Software Carpentry banner" src="img/software-carpentry-banner.png" />
+        </a>
       </div>
       <div class="row">
         <div class="col-md-10 col-md-offset-1">
           <h1 class="title">D3 - Paths</h1>
-          <h2 class="subtitle">Let's make some lines!</h2>
-<p>Polygons and circles are all well and good, but sometimes you need a more complicated shape. Or maybe a line. In either case, what you're looking for is an SVG <code>path</code>. Paths are elements just like <code>circle</code> and <code>rect</code>. However, whereas circles require you to set <code>cx</code>, <code>cy</code>, and <code>r</code>, paths have one attribute that describes their entire shape. This attribue it called <code>d</code>, and it contains a string. This string is actually a series of instructions for how to draw the path. You can think of it like someone has a pen and paper, and you're trying to tell them how to draw the shape that you want.</p>
-<p>For instance, you could draw a line with the string <code>&quot;M100 100 L200 200&quot;</code>. <code>M</code> means &quot;moveto&quot; - you're telling the person drawing your shape where on the paper they should put their pen down. In this case, the coordinates that the pen should be placed at are <code>(100, 100)</code>. All paths need to start with an <code>M</code> command. The next command is <code>L</code>. That stands for &quot;line to.&quot; You're telling the person drawing your shape to draw a line to coordinates <code>(200, 200)</code>.</p>
-<p>A full list of commands is available <a href="http://www.w3schools.com/svg/svg_path.asp">here</a>, if you're interested.</p>
+          <h2 class="subtitle">Let’s make some lines!</h2>
+<p>Polygons and circles are all well and good, but sometimes you need a
+more complicated shape. Or maybe a line. In either case, what you’re
+looking for is an SVG <code>path</code>. Paths are elements just like
+<code>circle</code> and <code>rect</code>. However, whereas circles
+require you to set <code>cx</code>, <code>cy</code>, and <code>r</code>,
+paths have one attribute that describes their entire shape. This
+attribue it called <code>d</code>, and it contains a string. This string
+is actually a series of instructions for how to draw the path. You can
+think of it like someone has a pen and paper, and you’re trying to tell
+them how to draw the shape that you want.</p>
+<p>For instance, you could draw a line with the string
+<code>"M100 100 L200 200"</code>. <code>M</code> means “moveto” - you’re
+telling the person drawing your shape where on the paper they should put
+their pen down. In this case, the coordinates that the pen should be
+placed at are <code>(100, 100)</code>. All paths need to start with an
+<code>M</code> command. The next command is <code>L</code>. That stands
+for “line to.” You’re telling the person drawing your shape to draw a
+line to coordinates <code>(200, 200)</code>.</p>
+<p>A full list of commands is available <a
+href="http://www.w3schools.com/svg/svg_path.asp">here</a>, if you’re
+interested.</p>
 <p>We could make this path in D3:</p>
-<pre class="js"><code>frame.append(&quot;path&quot;).attr(&quot;d&quot;, &quot;M100, 100 L200, 200&quot;)</code></pre>
-<p>But that's a pain. We don't want to bother fiddling with coordinates. And we certainly don't want to write a string that will draw, say, a high resolution image of <a href="https://en.wikipedia.org/wiki/How_Long_Is_the_Coast_of_Britain%3F_Statistical_Self-Similarity_and_Fractional_Dimension">Great Britain</a>.</p>
-<p>Fortunately, D3 gives us a better way. Remember how we can pass the <code>attr()</code> function a callback function as its second argument? And how every time we do that, the callback function gets passed whatever data is bound to the current element? Up until now, we've always written the callback function in the same line as we pass it to <code>attr()</code>. But it doesn't have to be that way. We can create the callback function somewhere earlier in the code and store it in a variable. That means we can write a function once that translates our data to a path description, and then use it every time we make a path.</p>
-<p>D3 goes one step beyond that. It has a series of functions that will create these path translation functions for us. Function-ception! D3 gives us functions to write functions to make lines, filled areas, arcs, and <a href="https://github.com/mbostock/d3/wiki/SVG-Shapes#line">more</a>. For now, let's talk about lines, since they're the most commonly used.</p>
-<p>The function to make a line-generating function is <code>d3.svg.line()</code>:</p>
-<pre class="js"><code>var line_maker = d3.svg.line();
-var data = [[100,100], [500,500]]
-
-line_maker(data);</code></pre>
+<div class="sourceCode" id="cb1"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>frame<span class="op">.</span><span class="fu">append</span>(<span class="st">&quot;path&quot;</span>)<span class="op">.</span><span class="fu">attr</span>(<span class="st">&quot;d&quot;</span><span class="op">,</span> <span class="st">&quot;M100, 100 L200, 200&quot;</span>)</span></code></pre></div>
+<p>But that’s a pain. We don’t want to bother fiddling with coordinates.
+And we certainly don’t want to write a string that will draw, say, a
+high resolution image of <a
+href="https://en.wikipedia.org/wiki/How_Long_Is_the_Coast_of_Britain%3F_Statistical_Self-Similarity_and_Fractional_Dimension">Great
+Britain</a>.</p>
+<p>Fortunately, D3 gives us a better way. Remember how we can pass the
+<code>attr()</code> function a callback function as its second argument?
+And how every time we do that, the callback function gets passed
+whatever data is bound to the current element? Up until now, we’ve
+always written the callback function in the same line as we pass it to
+<code>attr()</code>. But it doesn’t have to be that way. We can create
+the callback function somewhere earlier in the code and store it in a
+variable. That means we can write a function once that translates our
+data to a path description, and then use it every time we make a
+path.</p>
+<p>D3 goes one step beyond that. It has a series of functions that will
+create these path translation functions for us. Function-ception! D3
+gives us functions to write functions to make lines, filled areas, arcs,
+and <a
+href="https://github.com/mbostock/d3/wiki/SVG-Shapes#line">more</a>. For
+now, let’s talk about lines, since they’re the most commonly used.</p>
+<p>The function to make a line-generating function is
+<code>d3.svg.line()</code>:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> line_maker <span class="op">=</span> d3<span class="op">.</span><span class="at">svg</span><span class="op">.</span><span class="fu">line</span>()<span class="op">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> data <span class="op">=</span> [[<span class="dv">100</span><span class="op">,</span><span class="dv">100</span>]<span class="op">,</span> [<span class="dv">500</span><span class="op">,</span><span class="dv">500</span>]]</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">line_maker</span>(data)<span class="op">;</span></span></code></pre></div>
 <pre class="out"><code>&quot;M100,100L400,400&quot;</code></pre>
-<p>Since we didn't change any default settings, <code>line_maker</code> expected to receive a list of (x, y) coordinate pairs that directly translate to on-screen coordinates. It gave us a string describing a line that started at the first point (100, 100) and went to the second point (500, 500).</p>
-<p>Let's see how it looks! Note that we have to put <code>data</code> inside another array - otherwise D3 will think we want one path with the data value <code>[100, 100]</code> and a second path with the data value <code>[500, 500]</code> instead of a single path with the data value <code>[[100, 100], [500, 500]]</code>. Also note that we have to set the stroke color to black for the line to actually show up.</p>
-<pre class="js"><code>frame.append(&quot;g&quot;)
-    .selectAll(&quot;path&quot;)
-    .data([data])
-    .enter()
-    .append(&quot;path&quot;)
-    .attr(&quot;d&quot;, line_maker)
-    .style(&quot;stroke&quot;, &quot;black&quot;)</code></pre>
-<p>D3 also offers a lot of ways to customize the lines that the line generator makes. For instance, we've got this nice scale on our chart. Wouldn't it be nice if we could use this scale for the line too? Turns out we can! With the x accessor function (<code>.x()</code>), we can pass our line generator a new function to use for converting the raw data to an x value:</p>
-<pre class="js"><code>line_maker.x(function(d) {return (xScale(d[0])) })</code></pre>
-<p>Like the default function, this function assumes that each data point in the series is a two-element array representing the x and y coordinates. It takes the x coordinate and passes it into our <code>xScale</code> from before (yes, it was secretly a function all along, too). We can do the same thing with y:</p>
-<pre class="js"><code>line_maker.y(function(d) {return (yScale(d[1])) })</code></pre>
-<div id="use-a-different-data-format" class="challenge panel panel-success">
-<div class="panel-heading">
-<h1><span class="glyphicon glyphicon-pencil"></span>Use a different data format</h1>
-</div>
-<div class="panel-body">
-<p>The data in our example dataset isn't an array of arrays, it's an array of objects. Change the x and y accessors to assume that each data point is an object with a <code>gdpPercap</code> variable and a <code>lifeExp</code> variable, like in our dataset.</p>
-</div>
-</div>
-<p>There are more functions for changing the way the lines is made (e.g. which <code>interpolate</code> function is used), but these are by far the two most common.</p>
-<div id="display-a-countrys-trajectory" class="challenge panel panel-success">
-<div class="panel-heading">
-<h1><span class="glyphicon glyphicon-pencil"></span>Display a country's trajectory</h1>
-</div>
-<div class="panel-body">
-<p>One problem with this visualization is that it's hard to track what any one country does over time. Choose a country and plot a path representing data points from that country from all years.</p>
-<p>Hint #1: Step 1 is filtering the entire data-set by country Hint #2: If you don't set the style of &quot;fill&quot; to &quot;none&quot;, D3 will attempt to fill in the area &quot;inside&quot; your line, usually with strange-looking results.</p>
-</div>
-</div>
-<div id="add-a-fancy-interaction" class="challenge panel panel-success">
-<div class="panel-heading">
-<h1><span class="glyphicon glyphicon-pencil"></span>Add a fancy interaction</h1>
-</div>
-<div class="panel-body">
-<p>Add an event so that when you click a circle, it's trajectory shows up and when you click it again it goes away and you can click a different circle. Hint: Remember that you can remove an element by binding empty data and and then removing the exit selection.</p>
-<p>If you're feeling adventurous, try to make it possible to show as many paths at once as you want. Hint: Think about filtering by data.</p>
-</div>
-</div>
+<p>Since we didn’t change any default settings, <code>line_maker</code>
+expected to receive a list of (x, y) coordinate pairs that directly
+translate to on-screen coordinates. It gave us a string describing a
+line that started at the first point (100, 100) and went to the second
+point (500, 500).</p>
+<p>Let’s see how it looks! Note that we have to put <code>data</code>
+inside another array - otherwise D3 will think we want one path with the
+data value <code>[100, 100]</code> and a second path with the data value
+<code>[500, 500]</code> instead of a single path with the data value
+<code>[[100, 100], [500, 500]]</code>. Also note that we have to set the
+stroke color to black for the line to actually show up.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>frame<span class="op">.</span><span class="fu">append</span>(<span class="st">&quot;g&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">selectAll</span>(<span class="st">&quot;path&quot;</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">data</span>([data])</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">enter</span>()</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">append</span>(<span class="st">&quot;path&quot;</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">&quot;d&quot;</span><span class="op">,</span> line_maker)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">style</span>(<span class="st">&quot;stroke&quot;</span><span class="op">,</span> <span class="st">&quot;black&quot;</span>)</span></code></pre></div>
+<p>D3 also offers a lot of ways to customize the lines that the line
+generator makes. For instance, we’ve got this nice scale on our chart.
+Wouldn’t it be nice if we could use this scale for the line too? Turns
+out we can! With the x accessor function (<code>.x()</code>), we can
+pass our line generator a new function to use for converting the raw
+data to an x value:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>line_maker<span class="op">.</span><span class="fu">x</span>(<span class="kw">function</span>(d) {<span class="cf">return</span> (<span class="fu">xScale</span>(d[<span class="dv">0</span>])) })</span></code></pre></div>
+<p>Like the default function, this function assumes that each data point
+in the series is a two-element array representing the x and y
+coordinates. It takes the x coordinate and passes it into our
+<code>xScale</code> from before (yes, it was secretly a function all
+along, too). We can do the same thing with y:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>line_maker<span class="op">.</span><span class="fu">y</span>(<span class="kw">function</span>(d) {<span class="cf">return</span> (<span class="fu">yScale</span>(d[<span class="dv">1</span>])) })</span></code></pre></div>
+<blockquote>
+<p>#Use a different data format {.challenge} The data in our example
+dataset isn’t an array of arrays, it’s an array of objects. Change the x
+and y accessors to assume that each data point is an object with a
+<code>gdpPercap</code> variable and a <code>lifeExp</code> variable,
+like in our dataset.</p>
+</blockquote>
+<p>There are more functions for changing the way the lines is made
+(e.g. which <code>interpolate</code> function is used), but these are by
+far the two most common.</p>
+<blockquote>
+<p>#Display a country’s trajectory {.challenge} One problem with this
+visualization is that it’s hard to track what any one country does over
+time. Choose a country and plot a path representing data points from
+that country from all years.</p>
+<p>Hint #1: Step 1 is filtering the entire data-set by country Hint #2:
+If you don’t set the style of “fill” to “none”, D3 will attempt to fill
+in the area “inside” your line, usually with strange-looking
+results.</p>
+</blockquote>
+<blockquote>
+<p>#Add a fancy interaction {.challenge} Add an event so that when you
+click a circle, it’s trajectory shows up and when you click it again it
+goes away and you can click a different circle. Hint: Remember that you
+can remove an element by binding empty data and and then removing the
+exit selection.</p>
+<p>If you’re feeling adventurous, try to make it possible to show as
+many paths at once as you want. Hint: Think about filtering by data.</p>
+</blockquote>
         </div>
       </div>
       <div class="footer">

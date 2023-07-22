@@ -19,15 +19,20 @@
   <body class="lesson">
     <div class="container card">
       <div class="banner">
+        <a href="http://software-carpentry.org" title="Software Carpentry">
+          <img alt="Software Carpentry banner" src="img/software-carpentry-banner.png" />
+        </a>
       </div>
       <div class="row">
         <div class="col-md-10 col-md-offset-1">
           <h1 class="title">D3 - Maps</h1>
           <h2 class="subtitle">Because checkboxes are boring</h2>
 <div id="learning-objectives" class="objectives panel panel-warning">
-<div class="panel-heading">
-<h2><span class="glyphicon glyphicon-certificate"></span>Learning Objectives</h2>
-</div>
+<section id="learning-objectives"
+class="objectives panel panel-warning panel-heading">
+<h2 class="objectives panel panel-warning"><span
+class="glyphicon glyphicon-certificate"></span>Learning Objectives</h2>
+</section>
 <div class="panel-body">
 <ul>
 <li>Making a map in D3</li>
@@ -35,102 +40,200 @@
 </ul>
 </div>
 </div>
-<p>Right now, we have circles colored by continent, but it's not obvious which continent stands for which color. Since D3 also handles maps really nicely, let's replace the checkboxes with a map that lets us select and de-select continents. If color the continents the same way as the circles, it will double as a legend!</p>
-<p>First, let's make a new canvas to hold all of our map stuff. We'll append this to our <code>frame</code> element, so that it ends up on the same SVG canvas as our other shapes:</p>
-<pre class="js"><code>var map_canvas = frame.append(&quot;g&quot;);
-var map_width = 300;
-var map_height = 150;</code></pre>
-<p>Since there's a nice strong postive correlation between income and life-expectancy, that lower right corner of the graph looks like a good place for the map. We can position it there by subtracting the map canvas' height and width from the main canvas' height and width, and moving the map canvas to there:</p>
-<pre class="js"><code>var upper_x = canvas_width - map_width;
-var upper_y = canvas_height - map_height;
-map_canvas.attr(&quot;transform&quot;, &quot;translate(&quot; + upper_x + &quot;,&quot; + upper_y + &quot;)&quot; );    </code></pre>
-<p>Okay, great. Now we need to get some data telling us what the continents on earth actually look like. The easiest format to use this data in is <code>.json</code>. JSON stands for JavaScript Object Notation, and it looks exactly like Javascript objects that we've already seen. Technically, the file that we're going to use here is in <code>[TopoJSON](https://github.com/mbostock/topojson)</code> format, which allows for easy description of geographic shapes. A JSON file containing outlines for all of the continents is available <a href="http://alackles.github.io/D3-visualising-data/resources/continents.json">here</a>. We can load this file with the <code>d3.json()</code> function, which works just like <code>d3.csv()</code> except that it loads a JSON file:</p>
-<pre class="js"><code>d3.json(&quot;http://alackles.github.io/D3-visualising-data/resources/continents.json&quot;, function(continent_data) {
-//All of our map stuff happens here
-}</code></pre>
-<p>This file contains an array of five <code>FeatureCollection</code> objects. D3 understands how to convert these objects into paths, so we don't need to worry too much about their contents. We can just bind them to a selection like we did before:</p>
-<pre class="js"><code>var continents = map_canvas.selectAll(&quot;.continent&quot;).data(continent_data);</code></pre>
-<p>Here, we have selected all of the objects within <code>map_canvas</code> that have class <code>continent</code> (currently nothing), and bound the data from the JSON file to them. Since the selection we bound the data to was empty, everything will be in the <code>enter</code> selection. For each element, we want to add a path. Since these are geographic paths, we're going to use the <code>d3.geo.path()</code> function instaed of the normal <code>d3.path()</code> function, so that D3 will be able to handle the eccentricities of geographic data:</p>
-<pre class="js"><code>continents.enter().append(&quot;path&quot;)
-    .attr(&quot;class&quot;, &quot;continent&quot;)
-    .attr(&quot;d&quot;, d3.geo.path())
-    .attr(&quot;name&quot;, function(d) {return d.name;}
-    .style(&quot;fill&quot;, function(d) { return colorScale(d.name); })</code></pre>
-<p>Well that's sure a big map. If we want to control it, we'll need to customize the <code>d3.geo.path()</code> function a little bit. Just like our axes were governed by a <code>scale</code> object with <code>domain</code> and <code>range</code> to tell it how incoming numbers should map to pixels on the webpage, <code>geo.path</code> objects have an associated <code>projection</code> object that tells them how geographic coordinates should map to your web-page. In the case of maps it's a little more complicated, though, because mapping points on a sphere to a flat surface invariably introduces distortions. People have come up with many different map projections over the years, each of which have their own strengths and weaknesses (<a href="http://xkcd.com/977/">your favorite says a lot about you</a>). D3 has <a href="https://github.com/mbostock/d3/wiki/Geo-Projections">many</a> built-in, and just about any that you could ever want in the <a href="https://github.com/d3/d3-geo-projection/">Extended Geographic Projections library</a>. For now, let's use the equirectangular projection because, in the words of XKCD, &quot;<a href="http://xkcd.com/977/">this one's fine</a>&quot;:</p>
-<pre class="js"><code>var projection = d3.geo.equirectangular()
-    .translate([(map_width/2), (map_height/2)])
-    .scale( map_width / 2 / Math.PI);
-var path = d3.geo.path().projection(projection);</code></pre>
-<p>This will center the projection in our map canvas, scale it appropriately, and then create a <code>geo.path</code> that uses it. We can now go back and use it to create the continent paths:</p>
-<pre class="js"><code>continents.enter().append(&quot;path&quot;)
-    .attr(&quot;class&quot;, &quot;continent&quot;)
-    .attr(&quot;d&quot;, path)
-    .attr(&quot;name&quot;, function(d) {return d.name;}
-    .style(&quot;fill&quot;, function(d) { return colorScale(d.name); });</code></pre>
-<p>There, that's better!</p>
-<div id="try-out-another-projection" class="challenge panel panel-success">
-<div class="panel-heading">
-<h1><span class="glyphicon glyphicon-pencil"></span>Try out another projection!</h1>
-</div>
+<p>Right now, we have circles colored by continent, but it’s not obvious
+which continent stands for which color. Since D3 also handles maps
+really nicely, let’s replace the checkboxes with a map that lets us
+select and de-select continents. If color the continents the same way as
+the circles, it will double as a legend!</p>
+<p>First, let’s make a new canvas to hold all of our map stuff. We’ll
+append this to our <code>frame</code> element, so that it ends up on the
+same SVG canvas as our other shapes:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> map_canvas <span class="op">=</span> frame<span class="op">.</span><span class="fu">append</span>(<span class="st">&quot;g&quot;</span>)<span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> map_width <span class="op">=</span> <span class="dv">300</span><span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> map_height <span class="op">=</span> <span class="dv">150</span><span class="op">;</span></span></code></pre></div>
+<p>Since there’s a nice strong postive correlation between income and
+life-expectancy, that lower right corner of the graph looks like a good
+place for the map. We can position it there by subtracting the map
+canvas’ height and width from the main canvas’ height and width, and
+moving the map canvas to there:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> upper_x <span class="op">=</span> canvas_width <span class="op">-</span> map_width<span class="op">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> upper_y <span class="op">=</span> canvas_height <span class="op">-</span> map_height<span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>map_canvas<span class="op">.</span><span class="fu">attr</span>(<span class="st">&quot;transform&quot;</span><span class="op">,</span> <span class="st">&quot;translate(&quot;</span> <span class="op">+</span> upper_x <span class="op">+</span> <span class="st">&quot;,&quot;</span> <span class="op">+</span> upper_y <span class="op">+</span> <span class="st">&quot;)&quot;</span> )<span class="op">;</span>    </span></code></pre></div>
+<p>Okay, great. Now we need to get some data telling us what the
+continents on earth actually look like. The easiest format to use this
+data in is <code>.json</code>. JSON stands for JavaScript Object
+Notation, and it looks exactly like Javascript objects that we’ve
+already seen. Technically, the file that we’re going to use here is in
+<code>[TopoJSON](https://github.com/mbostock/topojson)</code> format,
+which allows for easy description of geographic shapes. A JSON file
+containing outlines for all of the continents is available <a
+href="http://alackles.github.io/D3-visualising-data/resources/continents.json">here</a>.
+We can load this file with the <code>d3.json()</code> function, which
+works just like <code>d3.csv()</code> except that it loads a JSON
+file:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>d3<span class="op">.</span><span class="fu">json</span>(<span class="st">&quot;http://alackles.github.io/D3-visualising-data/resources/continents.json&quot;</span><span class="op">,</span> <span class="kw">function</span>(continent_data) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">//All of our map stuff happens here</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>This file contains an array of five <code>FeatureCollection</code>
+objects. D3 understands how to convert these objects into paths, so we
+don’t need to worry too much about their contents. We can just bind them
+to a selection like we did before:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> continents <span class="op">=</span> map_canvas<span class="op">.</span><span class="fu">selectAll</span>(<span class="st">&quot;.continent&quot;</span>)<span class="op">.</span><span class="fu">data</span>(continent_data)<span class="op">;</span></span></code></pre></div>
+<p>Here, we have selected all of the objects within
+<code>map_canvas</code> that have class <code>continent</code>
+(currently nothing), and bound the data from the JSON file to them.
+Since the selection we bound the data to was empty, everything will be
+in the <code>enter</code> selection. For each element, we want to add a
+path. Since these are geographic paths, we’re going to use the
+<code>d3.geo.path()</code> function instaed of the normal
+<code>d3.path()</code> function, so that D3 will be able to handle the
+eccentricities of geographic data:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>continents<span class="op">.</span><span class="fu">enter</span>()<span class="op">.</span><span class="fu">append</span>(<span class="st">&quot;path&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">merge</span>()</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">&quot;class&quot;</span><span class="op">,</span> <span class="st">&quot;continent&quot;</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">&quot;d&quot;</span><span class="op">,</span> d3<span class="op">.</span><span class="at">geo</span><span class="op">.</span><span class="fu">path</span>())</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">&quot;name&quot;</span><span class="op">,</span> <span class="kw">function</span>(d) {<span class="cf">return</span> d<span class="op">.</span><span class="at">name</span><span class="op">;</span>}</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">style</span>(<span class="st">&quot;fill&quot;</span><span class="op">,</span> <span class="kw">function</span>(d) { <span class="cf">return</span> <span class="fu">colorScale</span>(d<span class="op">.</span><span class="at">name</span>)<span class="op">;</span> })</span></code></pre></div>
+<p>Well that’s sure a big map. If we want to control it, we’ll need to
+customize the <code>d3.geo.path()</code> function a little bit. Just
+like our axes were governed by a <code>scale</code> object with
+<code>domain</code> and <code>range</code> to tell it how incoming
+numbers should map to pixels on the webpage, <code>geo.path</code>
+objects have an associated <code>projection</code> object that tells
+them how geographic coordinates should map to your web-page. In the case
+of maps it’s a little more complicated, though, because mapping points
+on a sphere to a flat surface invariably introduces distortions. People
+have come up with many different map projections over the years, each of
+which have their own strengths and weaknesses (<a
+href="http://xkcd.com/977/">your favorite says a lot about you</a>). D3
+has <a
+href="https://github.com/mbostock/d3/wiki/Geo-Projections">many</a>
+built-in, and just about any that you could ever want in the <a
+href="https://github.com/d3/d3-geo-projection/">Extended Geographic
+Projections library</a>. For now, let’s use the equirectangular
+projection because, in the words of XKCD, “<a
+href="http://xkcd.com/977/">this one’s fine</a>”:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> projection <span class="op">=</span> d3<span class="op">.</span><span class="at">geo</span><span class="op">.</span><span class="fu">equirectangular</span>()</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">translate</span>([(map_width<span class="op">/</span><span class="dv">2</span>)<span class="op">,</span> (map_height<span class="op">/</span><span class="dv">2</span>)])</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">scale</span>( map_width <span class="op">/</span> <span class="dv">2</span> <span class="op">/</span> <span class="bu">Math</span><span class="op">.</span><span class="cn">PI</span>)<span class="op">;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> path <span class="op">=</span> d3<span class="op">.</span><span class="at">geo</span><span class="op">.</span><span class="fu">path</span>()<span class="op">.</span><span class="fu">projection</span>(projection)<span class="op">;</span></span></code></pre></div>
+<p>This will center the projection in our map canvas, scale it
+appropriately, and then create a <code>geo.path</code> that uses it. We
+can now go back and use it to create the continent paths:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>continents<span class="op">.</span><span class="fu">enter</span>()<span class="op">.</span><span class="fu">append</span>(<span class="st">&quot;path&quot;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">merge</span>()</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">&quot;class&quot;</span><span class="op">,</span> <span class="st">&quot;continent&quot;</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">&quot;d&quot;</span><span class="op">,</span> path)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">&quot;name&quot;</span><span class="op">,</span> <span class="kw">function</span>(d) {<span class="cf">return</span> d<span class="op">.</span><span class="at">name</span><span class="op">;</span>}</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">style</span>(<span class="st">&quot;fill&quot;</span><span class="op">,</span> <span class="kw">function</span>(d) { <span class="cf">return</span> <span class="fu">colorScale</span>(d<span class="op">.</span><span class="at">name</span>)<span class="op">;</span> })<span class="op">;</span></span></code></pre></div>
+<p>There, that’s better!</p>
+<div id="try-out-another-projection"
+class="challenge panel panel-success">
+<section id="try-out-another-projection"
+class="challenge panel panel-success panel-heading">
+<h1 class="challenge panel panel-success"><span
+class="glyphicon glyphicon-pencil"></span>Try out another
+projection!</h1>
+</section>
 <div class="panel-body">
-<p>Swap out the equirectangular projection for something more exciting! Remember that if you want to use one of the maps from the extended library you need to add the link to it to your html file:</p>
-<p><code>&lt;script src=&quot;http://d3js.org/d3.geo.projection.v0.min.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;</code></p>
+<p>Swap out the equirectangular projection for something more exciting!
+Remember that if you want to use one of the maps from the extended
+library you need to add the link to it to your html file:</p>
+<p><code>&lt;script src="http://d3js.org/d3.geo.projection.v0.min.js" charset="utf-8"&gt;&lt;/script&gt;</code></p>
 </div>
 </div>
-<p>Now let's add the interactions so that we can use the map instead of the checkboxes. We want to bind an interaction to each continent so something happens when we click on it. Conveniently, since we gave all of the continents their own class, we can easily select all of them. We'll also use classes to keep track of which continents are currently selected vs. unselected. Other than that, this is going to be really similar to our checkbox function:</p>
-<pre class="js"><code>map_canvas.selectAll(&quot;.continent&quot;).on(&quot;click&quot;, function(d){
-    if (d3.select(this).classed(&quot;unselected&quot;)){
-       //We&#39;re adding data points
-       d3.select(this).classed(&quot;unselected&quot;, false)
-       var new_nations = nations.filter(function(nation){
-           return nation.continent == d.name &amp;&amp; nation.year==year;});
-       filtered_nations = filtered_nations.concat(new_nations);
-
-    
-    } else {
-        //we&#39;re removing data points
-    d3.select(this).classed(&quot;unselected&quot;, true)
-    filtered_nations = filtered_nations.filter(function(nation){
-        return nation.continent != d.name;});
-    };
-    update();
-});</code></pre>
-<p>We used a few new things here. The <code>this</code> keyword refers to the continent that this function is bound to. D3's <code>classed</code> function returns true if the selection has the specified class, or, if there's a second argument, adds or removes that class based on whether the second argument is <code>true</code> or <code>false</code>. So, in this function, we toggle whether or not the selection has the class <code>unselected</code>.</p>
-<p>One thing that was nice about the checkboxes is that we could see which ones were selected. Let's make it so the map can do the same thing! We can decrease the opacity of continents when their data isn't being displayed. Since we've already assigned a class to the unselected continents, we can do this in our CSS stylesheet:</p>
-<pre class="sourceCode css"><code class="sourceCode css"><span class="fl">.unselected</span> <span class="kw">{</span>
-    <span class="kw">opacity:</span> <span class="dt">.5</span><span class="kw">;</span>
-<span class="kw">}</span></code></pre>
+<p>Now let’s add the interactions so that we can use the map instead of
+the checkboxes. We want to bind an interaction to each continent so
+something happens when we click on it. Conveniently, since we gave all
+of the continents their own class, we can easily select all of them.
+We’ll also use classes to keep track of which continents are currently
+selected vs. unselected. Other than that, this is going to be really
+similar to our checkbox function:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>map_canvas<span class="op">.</span><span class="fu">selectAll</span>(<span class="st">&quot;.continent&quot;</span>)<span class="op">.</span><span class="fu">on</span>(<span class="st">&quot;click&quot;</span><span class="op">,</span> <span class="kw">function</span>(d){</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (d3<span class="op">.</span><span class="fu">select</span>(<span class="kw">this</span>)<span class="op">.</span><span class="fu">classed</span>(<span class="st">&quot;unselected&quot;</span>)){</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>       <span class="co">//We&#39;re adding data points</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>       d3<span class="op">.</span><span class="fu">select</span>(<span class="kw">this</span>)<span class="op">.</span><span class="fu">classed</span>(<span class="st">&quot;unselected&quot;</span><span class="op">,</span> <span class="kw">false</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>       <span class="kw">var</span> new_nations <span class="op">=</span> nations<span class="op">.</span><span class="fu">filter</span>(<span class="kw">function</span>(nation){</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>           <span class="cf">return</span> nation<span class="op">.</span><span class="at">continent</span> <span class="op">==</span> d<span class="op">.</span><span class="at">name</span> <span class="op">&amp;&amp;</span> nation<span class="op">.</span><span class="at">year</span><span class="op">==</span>year<span class="op">;</span>})<span class="op">;</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>       filtered_nations <span class="op">=</span> filtered_nations<span class="op">.</span><span class="fu">concat</span>(new_nations)<span class="op">;</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>        <span class="co">//we&#39;re removing data points</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    d3<span class="op">.</span><span class="fu">select</span>(<span class="kw">this</span>)<span class="op">.</span><span class="fu">classed</span>(<span class="st">&quot;unselected&quot;</span><span class="op">,</span> <span class="kw">true</span>)</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    filtered_nations <span class="op">=</span> filtered_nations<span class="op">.</span><span class="fu">filter</span>(<span class="kw">function</span>(nation){</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> nation<span class="op">.</span><span class="at">continent</span> <span class="op">!=</span> d<span class="op">.</span><span class="at">name</span><span class="op">;</span>})<span class="op">;</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    }<span class="op">;</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">update</span>()<span class="op">;</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p>We used a few new things here. The <code>this</code> keyword refers
+to the continent that this function is bound to. D3’s
+<code>classed</code> function returns true if the selection has the
+specified class, or, if there’s a second argument, adds or removes that
+class based on whether the second argument is <code>true</code> or
+<code>false</code>. So, in this function, we toggle whether or not the
+selection has the class <code>unselected</code>.</p>
+<p>One thing that was nice about the checkboxes is that we could see
+which ones were selected. Let’s make it so the map can do the same
+thing! We can decrease the opacity of continents when their data isn’t
+being displayed. Since we’ve already assigned a class to the unselected
+continents, we can do this in our CSS stylesheet:</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode css"><code class="sourceCode css"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.unselected</span> {</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">opacity</span>: <span class="dv">.5</span><span class="op">;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>Ta-da!</p>
 <div id="fix-the-slider" class="challenge panel panel-success">
-<div class="panel-heading">
-<h1><span class="glyphicon glyphicon-pencil"></span>Fix the slider</h1>
-</div>
+<section id="fix-the-slider"
+class="challenge panel panel-success panel-heading">
+<h1 class="challenge panel panel-success"><span
+class="glyphicon glyphicon-pencil"></span>Fix the slider</h1>
+</section>
 <div class="panel-body">
-<p>Now that we've changed how we select data, the slider doesn't know how to correctly check for continents it should be leaving out. Fix it so that it checks for continents with the <code>unselected</code> class.</p>
-<p>Hint: <code>.classed()</code> works on selections - we don't need to worry about picking out just the element itself like we did with checkboxes.</p>
+<p>Now that we’ve changed how we select data, the slider doesn’t know
+how to correctly check for continents it should be leaving out. Fix it
+so that it checks for continents with the <code>unselected</code>
+class.</p>
+<p>Hint: <code>.classed()</code> works on selections - we don’t need to
+worry about picking out just the element itself like we did with
+checkboxes.</p>
 </div>
 </div>
-<div id="add-a-box-around-the-map" class="challenge panel panel-success">
-<div class="panel-heading">
-<h1><span class="glyphicon glyphicon-pencil"></span>Add a box around the map</h1>
-</div>
+<div id="add-a-box-around-the-map"
+class="challenge panel panel-success">
+<section id="add-a-box-around-the-map"
+class="challenge panel panel-success panel-heading">
+<h1 class="challenge panel panel-success"><span
+class="glyphicon glyphicon-pencil"></span>Add a box around the map</h1>
+</section>
 <div class="panel-body">
-<p>That map is kind of looking like it's hovering in the middle of nowhere. Add a box around it to make it look more like a legend.</p>
-<p>Hint: The <code>rect</code> SVG element lets you specify a <code>stroke</code> color and a <code>fill</code> color independently.</p>
+<p>That map is kind of looking like it’s hovering in the middle of
+nowhere. Add a box around it to make it look more like a legend.</p>
+<p>Hint: The <code>rect</code> SVG element lets you specify a
+<code>stroke</code> color and a <code>fill</code> color
+independently.</p>
 </div>
 </div>
 <div id="more-practice-with-maps" class="challenge panel panel-success">
-<div class="panel-heading">
-<h1><span class="glyphicon glyphicon-pencil"></span>More practice with maps!</h1>
-</div>
+<section id="more-practice-with-maps"
+class="challenge panel panel-success panel-heading">
+<h1 class="challenge panel panel-success"><span
+class="glyphicon glyphicon-pencil"></span>More practice with maps!</h1>
+</section>
 <div class="panel-body">
-<p>A json file describing the shapes of all of the countries (as of 2015) is available at http://alackles.github.io/D3-visualising-data/resources/countries.json. See if you can use it to make a map that shows the countries.</p>
+<p>A json file describing the shapes of all of the countries (as of
+2015) is available at
+http://alackles.github.io/D3-visualising-data/resources/countries.json.
+See if you can use it to make a map that shows the countries.</p>
 </div>
 </div>
-<p>By the end of this lesson, your page should look something like this:</p>
-<iframe src="http://alackles.github.io/D3-visualising-data/code/index11.html" width="1000" height="600"></iframe>
-
-<p>The continents.json file was generated based on the code for <a href="http://techslides.com/continents-and-map-projections-with-d3-js">this map projection explorer</a></p>
+<p>By the end of this lesson, your page should look something like
+this:</p>
+<iframe src="http://alackles.github.io/D3-visualising-data/code/index11.html" width="1000" height="600">
+</iframe>
+<p>The continents.json file was generated based on the code for <a
+href="http://techslides.com/continents-and-map-projections-with-d3-js">this
+map projection explorer</a></p>
         </div>
       </div>
       <div class="footer">

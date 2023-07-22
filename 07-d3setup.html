@@ -62,11 +62,12 @@
 <p>Now, let's write main.js.</p>
 <p>D3-specific functions can be called using a <code>d3.</code>-syntax.</p>
 <p>The first thing we need, is of course our data, which is stored at 'http://alackles.github.io/D3-visualising-data/resources/nations.csv'. D3 provides a handy function to read in <code>csv</code>-files:</p>
-<pre class="d3"><code>d3.csv(&quot;http://alackles.github.io/D3-visualising-data/resources/nations.csv&quot;, function(nations) { }</code></pre>
+<pre class="d3"><code>d3.csv("http://alackles.github.io/D3-visualising-data/resources/nations.csv").then(function(nations){ })</code></pre>
 <p>This line probably needs a little explanation and we'll go through it bit by bit:</p>
 <ul>
 <li><code>d3.csv()</code> is called the function call. In this case, we have a function that reads in a json file, parses it, and is also able to do something with the parsed data on the way.</li>
 <li>The first argument <code>&quot;http://alackles.github.io/D3-visualising-data/resources/nations.csv&quot;</code> tells the function where to get the data we want to have parsed.</li>
+<li> <code>.then()</code> tells d3 to load the data in `d3.csv()` first, and then apply any manipulations we specify afterwards. This is new to newer version of D3.
 <li><code>function(...){...}</code> is called the callback function. It is a so-called 'inline' function, which means it has no name (we're only operating in the object space here). This also means we can't use this function anywhere else in our code. The code we put inside the curly brackets is the code that's run once d3.json() is called and the data is loaded.</li>
 <li>D3 assigns the name <code>nations</code> to the parsed object it returns. We can only use 'nations' within the callback function, this means our code only knows of <code>nations</code> inside the curly brackets. This means most of our visualization code will need to go inside the curly brackets.</li>
 <li>What seems unusual, but is actually quite common, is that this function call doesn't return anything. It is simply executed and displayed (if we tell it to), but no value is returned.</li>

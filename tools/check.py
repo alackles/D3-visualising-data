@@ -20,7 +20,7 @@ import os
 import re
 import sys
 
-import CommonMark
+import commonmark as CommonMark
 import yaml
 
 import validation_helpers as vh
@@ -53,7 +53,7 @@ class MarkdownValidator(object):
             # Expect Markdown files to be in same directory as the input file
             self.markdown_dir = os.path.dirname(filename)
             self.lesson_dir = self.markdown_dir
-            with open(filename, 'rU') as f:
+            with open(filename, 'r', newline='') as f:
                 self.markdown = f.read()
         else:
             # Look for linked content in ../pages (relative to this file)
