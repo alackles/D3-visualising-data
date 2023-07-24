@@ -18,15 +18,15 @@ axes.
 
 ~~~{.js}
 // Create a logarithmic scale for the income 
-var xScale = d3.scale.log(); // income
+var xScale = d3.scaleLog(); // income
 xScale.domain([250, 1e5]); // set minimum and maximum value
 xScale.range([0, canvas_width]); // set minimum and maximum range on the page
 ~~~
 
-D3's scale object provides a number of functions to create the scaling we want 
-for our data. For example, we can choose between a logarithmic scale (`log`), a 
-linear scale (`linear`), a square root scale (`sqrt`), or a categorical scale 
-(e.g. `category20` can represent 20 different colours).
+D3's scale object provides a number of subfunctions to create the scaling we want 
+for our data. For example, we can choose between a logarithmic scale (`scaleLog`), a 
+linear scale (`scaleLinear`), a square root scale (`scaleSqrt`), or a categorical scale 
+(e.g. `scaleOrdinal(d3.schemeCategory20)` can represent 20 different colours).
 
 The domain consists of the data values that will get mapped to the minimum and maximum positions on the page specified by the range. Often, the domain will be set to the minimum and maximum values of the data and the range to the edges of the plotting area. 
 
@@ -35,7 +35,7 @@ Instead of spreading this code over three lines, we often find another notation
 online that achieves the same thing:
 
 ~~~{.js}
-var xScale = d3.scale.log().domain([300, 1e5]).range([0, canvas_width]);  
+var xScale = d3.scaleLog().domain([300, 1e5]).range([0, canvas_width]);  
 ~~~
 
 These two notations are interchangeable and it is entirely up to you to use the 
@@ -49,10 +49,10 @@ created:
 
 ~~~{.js}
 // Creating the x axis.
-var xAxis = d3.svg.axis().orient("bottom").scale(xScale);
+var xAxis = d3.axisBottom(xScale);
 ~~~
 
-`orient()` influences the orientation of the axis and the position of the ticks. We will still need to position it inside the canvas. 
+`axisBottom` and similar methods affect the location of the axes.
 
 So far, the xAxis exists, but it's not actually showing up anywhere on the page.
 To push the axis to our canvas, we create a new group element (using `.append`).
@@ -135,7 +135,7 @@ year is 2007.
 
 
 > # A new dimension {.challenge}
-> Change the code so that the radius of the circles represents the population. First, create a 'sqrt' scale (`d3.scale.sqrt()`) with a minimum of 0 and a maximum of 5e8. The range should be between 0 and 40. 
+> Change the code so that the radius of the circles represents the population. First, create a 'sqrt' scale (`d3.scaleSqrt()`) with a minimum of 0 and a maximum of 5e8. The range should be between 0 and 40. 
 
 
 <iframe src="http://alackles.github.io/D3-visualising-data/code/index08.html" width="1000" height="600"></iframe>

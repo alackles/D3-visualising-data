@@ -19,15 +19,20 @@
   <body class="lesson">
     <div class="container card">
       <div class="banner">
+        <a href="http://software-carpentry.org" title="Software Carpentry">
+          <img alt="Software Carpentry banner" src="img/software-carpentry-banner.png" />
+        </a>
       </div>
       <div class="row">
         <div class="col-md-10 col-md-offset-1">
           <h1 class="title">HTML</h1>
           <h2 class="subtitle">Making things appear in your browser</h2>
 <div id="learning-objectives" class="objectives panel panel-warning">
-<div class="panel-heading">
-<h2><span class="glyphicon glyphicon-certificate"></span>Learning Objectives</h2>
-</div>
+<section id="learning-objectives"
+class="objectives panel panel-warning panel-heading">
+<h2 class="objectives panel panel-warning"><span
+class="glyphicon glyphicon-certificate"></span>Learning Objectives</h2>
+</section>
 <div class="panel-body">
 <ul>
 <li>Create your first web page and view it in a browser</li>
@@ -36,53 +41,90 @@
 </ul>
 </div>
 </div>
-<p>A way of writing that is understood by all web browsers is HTML: hypertext markup language. Since we don’t have the ability to do logical operations (loops, etc.) with HTML alone, it’s not technically a programming language.</p>
-<p>Let’s see how we can get our browser to greet the world. We need to:</p>
+<p>A way of writing that is understood by all web browsers is HTML:
+hypertext markup language. Since we don’t have the ability to do logical
+operations (loops, etc.) with HTML alone, it’s not technically a
+programming language.</p>
+<p>Let’s see how we can get our browser to greet the world. We need
+to:</p>
 <ul>
-<li>Create a local folder 'd3_lesson'</li>
-<li>In the folder, create the file 'index.html'</li>
+<li>Create a local folder ‘d3_lesson’</li>
+<li>In the folder, create the file ‘index.html’</li>
 <li>Open the file with a text editor</li>
 </ul>
-<p>Now, if we want to open our new file in a browser, we have to tell it what kind of file to expect. To do this, we start our file with:</p>
-<pre class="sourceCode html"><code class="sourceCode html"><span class="dt">&lt;!DOCTYPE </span>html<span class="dt">&gt;</span>
-<span class="kw">&lt;html&gt;</span>
-    <span class="co">&lt;!--Everything goes in here (this is what html comments look like)--&gt;</span>
-<span class="kw">&lt;/html&gt;</span> </code></pre>
-<p>Every good webpage consists of a head and a body. The header (&lt;head&gt; to open and &lt;/head&gt; to close) normally contains any meta-data. This could be name of the page or the inclusion of other files.</p>
-<p>The body (&lt;body&gt; to open and &lt;/body&gt; to close) is where all our content should go. So everything we type between the brackets will be displayed on our page.</p>
-<pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;head&gt;</span> 
-<span class="kw">&lt;/head&gt;</span>
-<span class="kw">&lt;body&gt;</span> 
-    Hello world!
-<span class="kw">&lt;/body&gt;</span> </code></pre>
-<p>Since our web browser understands this language, we can instantly open our local index.html file and the browser will interpret our code as visual components.</p>
-<p>You can view a .html file in your browser by navigating to it in your file browser and double clicking on it. If you want to use a web browser other than your default (we reccomend Chrome or Firefox), open that web browser. With that browser as your active window, type <code>ctrl-o</code> (<code>cmd-o</code> on a mac) to bring up a window that will let you navigate to your file and click on it to open it.</p>
-<p>HTML has more predefined elements that will vary in size and style. To divide the page into different sections, we can create a division using &lt;div&gt; to open and &lt;/div&gt; to close it.</p>
-<pre class="sourceCode html"><code class="sourceCode html"><span class="dt">&lt;!DOCTYPE </span>html<span class="dt">&gt;</span>
-<span class="kw">&lt;html&gt;</span> 
-    <span class="kw">&lt;head&gt;</span> 
-        <span class="co">&lt;!--meta-data (like page title, inclusion of other files) --&gt;</span>
-    <span class="kw">&lt;/head&gt;</span> 
-    <span class="kw">&lt;body&gt;</span> 
-        <span class="kw">&lt;div&gt;</span>Hello world!<span class="kw">&lt;/div&gt;</span>
-        <span class="kw">&lt;div&gt;</span>Hello back!<span class="kw">&lt;/div&gt;</span>
-    <span class="kw">&lt;/body&gt;</span> 
-<span class="kw">&lt;/html&gt;</span> </code></pre>
-<p>Behind the scenes, the html is being used to created a heirarchical structure of all of the pieces in your webpage. This is called the <strong>Document Object Model Tree</strong>. Each element that you add to the page becomes a node, and any elements declared inside it are its children:</p>
+<p>Now, if we want to open our new file in a browser, we have to tell it
+what kind of file to expect. To do this, we start our file with:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode html"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;!DOCTYPE </span>html<span class="dt">&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;html&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">&lt;!--Everything goes in here (this is what html comments look like)--&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/html&gt;</span> </span></code></pre></div>
+<p>Every good webpage consists of a head and a body. The header
+(&lt;head&gt; to open and &lt;/head&gt; to close) normally contains any
+meta-data. This could be name of the page or the inclusion of other
+files.</p>
+<p>The body (&lt;body&gt; to open and &lt;/body&gt; to close) is where
+all our content should go. So everything we type between the brackets
+will be displayed on our page.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode html"><code class="sourceCode html"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;head&gt;</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/head&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;body&gt;</span> </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    Hello world!</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/body&gt;</span> </span></code></pre></div>
+<p>Since our web browser understands this language, we can instantly
+open our local index.html file and the browser will interpret our code
+as visual components.</p>
+<p>You can view a .html file in your browser by navigating to it in your
+file browser and double clicking on it. If you want to use a web browser
+other than your default (we reccomend Chrome or Firefox), open that web
+browser. With that browser as your active window, type
+<code>ctrl-o</code> (<code>cmd-o</code> on a mac) to bring up a window
+that will let you navigate to your file and click on it to open it.</p>
+<p>HTML has more predefined elements that will vary in size and style.
+To divide the page into different sections, we can create a division
+using &lt;div&gt; to open and &lt;/div&gt; to close it.</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode html"><code class="sourceCode html"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;!DOCTYPE </span>html<span class="dt">&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;html&gt;</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;head&gt;</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        <span class="co">&lt;!--meta-data (like page title, inclusion of other files) --&gt;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;/head&gt;</span> </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;body&gt;</span> </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">&lt;div&gt;</span>Hello world!<span class="kw">&lt;/div&gt;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        <span class="kw">&lt;div&gt;</span>Hello back!<span class="kw">&lt;/div&gt;</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;/body&gt;</span> </span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/html&gt;</span> </span></code></pre></div>
+<p>Behind the scenes, the html is being used to created a heirarchical
+structure of all of the pieces in your webpage. This is called the
+<strong>Document Object Model Tree</strong>. Each element that you add
+to the page becomes a node, and any elements declared inside it are its
+children:</p>
 <p><img src="img/DOM.png" alt="Diagram of the Document Object Model tree created by the above html" style="width: 50%;"/></p>
 <div id="other-elements" class="challenge panel panel-success">
-<div class="panel-heading">
-<h2><span class="glyphicon glyphicon-pencil"></span>Other elements</h2>
-</div>
+<section id="other-elements"
+class="challenge panel panel-success panel-heading">
+<h2 class="challenge panel panel-success"><span
+class="glyphicon glyphicon-pencil"></span>Other elements</h2>
+</section>
 <div class="panel-body">
-<p>Create a folder that contains the file index.html What seems to be the difference between &lt;div&gt;, &lt;h1&gt;, and &lt;em&gt;? What about the difference between two &lt;div&gt; elements and two &lt;span&gt; elements? Create a heading that is in italics. Never be afraid to google to find out how to use certain elements and find out about the syntax!</p>
+<p>Create a folder that contains the file index.html What seems to be
+the difference between &lt;div&gt;, &lt;h1&gt;, and &lt;em&gt;? What
+about the difference between two &lt;div&gt; elements and two
+&lt;span&gt; elements? Create a heading that is in italics. Never be
+afraid to google to find out how to use certain elements and find out
+about the syntax!</p>
 </div>
 </div>
-<p>Useful resources are also the mozilla developer network (<a href="https://developer.mozilla.org/en-US/">MDN</a>) and <a href="http://www.w3schools.com">w3school</a>.</p>
+<p>Useful resources are also the mozilla developer network (<a
+href="https://developer.mozilla.org/en-US/">MDN</a>) and <a
+href="http://www.w3schools.com">w3school</a>.</p>
         </div>
       </div>
       <div class="footer">
-        <a class="label swc-blue-bg" href="https://github.com/alackles/D3-visualising-data">Source</a>
+        <a class="label swc-blue-bg" href="http://software-carpentry.org">Software Carpentry</a>
+        <a class="label swc-blue-bg" href="https://github.com/swcarpentry/lesson-template">Source</a>
+        <a class="label swc-blue-bg" href="mailto:admin@software-carpentry.org">Contact</a>
         <a class="label swc-blue-bg" href="LICENSE.html">License</a>
       </div>
     </div>

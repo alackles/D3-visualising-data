@@ -19,15 +19,20 @@
   <body class="lesson">
     <div class="container card">
       <div class="banner">
+        <a href="http://software-carpentry.org" title="Software Carpentry">
+          <img alt="Software Carpentry banner" src="img/software-carpentry-banner.png" />
+        </a>
       </div>
       <div class="row">
         <div class="col-md-10 col-md-offset-1">
           <h1 class="title">D3 - Transitions</h1>
           <h2 class="subtitle">Move it!</h2>
 <div id="learning-objectives" class="objectives panel panel-warning">
-<div class="panel-heading">
-<h2><span class="glyphicon glyphicon-certificate"></span>Learning Objectives</h2>
-</div>
+<section id="learning-objectives"
+class="objectives panel panel-warning panel-heading">
+<h2 class="objectives panel panel-warning"><span
+class="glyphicon glyphicon-certificate"></span>Learning Objectives</h2>
+</section>
 <div class="panel-body">
 <ul>
 <li>Using a slider</li>
@@ -35,100 +40,155 @@
 </ul>
 </div>
 </div>
-<p>At the moment, the year that we are looking at in the data is hardcoded. Naturally, we want the user to be able to see how the data changes over time.</p>
-<p>Let's do this with a slider. The first thing we need to do is add this slider to the user interface (our website). A slider element is actually an <code>input</code> element with the the type <code>range</code>. We give it an ID in order to be able to select it from our JavaScript script, a class to style it (if we choose to), and a minimum, maximum, and step size that depend on our data. <code>value</code> is what we read out in order to know the position of the slider. Let's initialise it somewhere in the middle (1979).</p>
-<pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;input</span><span class="ot"> type=</span><span class="st">&quot;range&quot;</span><span class="ot"> name=</span><span class="st">&quot;range&quot;</span><span class="ot"> class=</span><span class="st">&quot;slider&quot;</span><span class="ot"> id=</span><span class="st">&quot;year_slider&quot;</span><span class="ot"> value=</span><span class="st">&quot;1979&quot;</span><span class="ot"> min=</span><span class="st">&quot;1950&quot;</span><span class="ot"> max=</span><span class="st">&quot;2008&quot;</span><span class="ot"> step=</span><span class="st">&quot;1&quot;</span> <span class="kw">&gt;&lt;br&gt;</span></code></pre>
-<p>In our script, we now want the year to be a variable, so we need to initialise it. Because the value is a string, we need to parse it to an integer using <code>parseInt()</code>.</p>
-<pre class="js"><code>var year = parseInt(document.getElementById(&quot;year_slider&quot;).value);</code></pre>
-<p>Now we need add another event listener that changes the year the moment we touch the slider. The event we want to listen for is called <code>input</code>. When we get an event, we need to add a new filter command to update the data. We then execute the <code>update()</code> function we wrote earlier.</p>
-<pre class="js"><code>d3.select(&quot;#year_slider&quot;).on(&quot;input&quot;, function () {
-    year = parseInt(this.value);
-    filtered_nations = nations.filter(function(nation){nation.year==year})
-    update();
-});</code></pre>
-<p>Uh-oh, looks like this doesn't play nicely with our checkboxes! Let's add a line to our filter function to make sure that this continent is currently checked:</p>
-<pre class="js"><code>d3.select(&quot;#year_slider&quot;).on(&quot;input&quot;, function () {
-    year = parseInt(this.value);
-    filtered_nations = nations.filter(function(nation){
-        //Grab the checkbox corresponding to this country
-        var checkbox = d3.selectAll(&quot;.region_cb&quot;)[0].filter(
-            function(cb){return cb.value == nation.continent})[0];
-
-        //If the checkbox is checked, see if the year matches
-        if (checkbox.checked){      
-             return(nation.year==year)
-        } else {
-               //Otherwise it doesn&#39;t matter what the year is
-               return(false)
-        }
-    })
-    update();
-});</code></pre>
-<p>So far, the update function is instantaneously updating the appearance of all circles when the data changes. If we want ppeople to watch circles change over time, this is neither pretty or helpful. To fix this, D3 also offers the <code>d3.transition</code> function to handle updating data. First, we need to define how to transition between data points. We might want to interpolate between to values linearly over the duration of 200 ms, like this:</p>
-<pre class="js"><code>circles.transition().ease(&quot;linear&quot;).duration(200);</code></pre>
-<p>Now we know how it's gonna happen, but we need to tell the transition what the actual change is. We can simply move the part of our code that updates the circle attributes from our <code>enter</code> function to our <code>transition</code> function.</p>
-<pre class="js"><code>circles.enter().append(&quot;circle&quot;).attr(&quot;class&quot;,&quot;data_point&quot;)
-        .style(&quot;fill&quot;, function(d) { return colorScale(d.continent); });
-circles.exit().remove();
-circles.transition().ease(&quot;linear&quot;).duration(200)
-        .attr(&quot;cx&quot;, function(d) { return xScale(d.gdpPercap); }) 
-        .attr(&quot;cy&quot;, function(d) { return yScale(d.lifeExp); })
-        .attr(&quot;r&quot;, function(d) {return rScale(d.pop)});</code></pre>
-<div id="other-transition-functions-you-might-want" class="callout panel panel-info">
-<div class="panel-heading">
-<h2><span class="glyphicon glyphicon-pushpin"></span>Other transition functions you might want</h2>
-</div>
+<p>At the moment, the year that we are looking at in the data is
+hardcoded. Naturally, we want the user to be able to see how the data
+changes over time.</p>
+<p>Let’s do this with a slider. The first thing we need to do is add
+this slider to the user interface (our website). A slider element is
+actually an <code>input</code> element with the the type
+<code>range</code>. We give it an ID in order to be able to select it
+from our JavaScript script, a class to style it (if we choose to), and a
+minimum, maximum, and step size that depend on our data.
+<code>value</code> is what we read out in order to know the position of
+the slider. Let’s initialise it somewhere in the middle (1979).</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode html"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;input</span> <span class="er">type</span><span class="ot">=</span><span class="st">&quot;range&quot;</span> <span class="er">name</span><span class="ot">=</span><span class="st">&quot;range&quot;</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;slider&quot;</span> <span class="er">id</span><span class="ot">=</span><span class="st">&quot;year_slider&quot;</span> <span class="er">value</span><span class="ot">=</span><span class="st">&quot;1979&quot;</span> <span class="er">min</span><span class="ot">=</span><span class="st">&quot;1950&quot;</span> <span class="er">max</span><span class="ot">=</span><span class="st">&quot;2008&quot;</span> <span class="er">step</span><span class="ot">=</span><span class="st">&quot;1&quot;</span> <span class="kw">&gt;&lt;br&gt;</span></span></code></pre></div>
+<p>In our script, we now want the year to be a variable, so we need to
+initialise it. Because the value is a string, we need to parse it to an
+integer using <code>parseInt()</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> year <span class="op">=</span> <span class="pp">parseInt</span>(<span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(<span class="st">&quot;year_slider&quot;</span>)<span class="op">.</span><span class="at">value</span>)<span class="op">;</span></span></code></pre></div>
+<p>Now we need add another event listener that changes the year the
+moment we touch the slider. The event we want to listen for is called
+<code>input</code>. When we get an event, we need to add a new filter
+command to update the data. We then execute the <code>update()</code>
+function we wrote earlier.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>d3<span class="op">.</span><span class="fu">select</span>(<span class="st">&quot;#year_slider&quot;</span>)<span class="op">.</span><span class="fu">on</span>(<span class="st">&quot;input&quot;</span><span class="op">,</span> <span class="kw">function</span> () {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    year <span class="op">=</span> <span class="pp">parseInt</span>(<span class="kw">this</span><span class="op">.</span><span class="at">value</span>)<span class="op">;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    filtered_nations <span class="op">=</span> nations<span class="op">.</span><span class="fu">filter</span>(<span class="kw">function</span>(nation){nation<span class="op">.</span><span class="at">year</span><span class="op">==</span>year})</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">update</span>()<span class="op">;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p>Uh-oh, looks like this doesn’t play nicely with our checkboxes! Let’s
+add a line to our filter function to make sure that this continent is
+currently checked:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>d3<span class="op">.</span><span class="fu">select</span>(<span class="st">&quot;#year_slider&quot;</span>)<span class="op">.</span><span class="fu">on</span>(<span class="st">&quot;input&quot;</span><span class="op">,</span> <span class="kw">function</span> () {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    year <span class="op">=</span> <span class="pp">parseInt</span>(<span class="kw">this</span><span class="op">.</span><span class="at">value</span>)<span class="op">;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    filtered_nations <span class="op">=</span> nations<span class="op">.</span><span class="fu">filter</span>(<span class="kw">function</span>(nation){</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        <span class="co">//Grab the checkbox corresponding to this country</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">var</span> checkbox <span class="op">=</span> d3<span class="op">.</span><span class="fu">selectAll</span>(<span class="st">&quot;.region_cb&quot;</span>)[<span class="dv">0</span>]<span class="op">.</span><span class="fu">filter</span>(</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>            <span class="kw">function</span>(cb){<span class="cf">return</span> <span class="kw">this</span><span class="op">.</span><span class="at">value</span> <span class="op">==</span> nation<span class="op">.</span><span class="at">continent</span>})[<span class="dv">0</span>]<span class="op">;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        <span class="co">//If the checkbox is checked, see if the year matches</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (checkbox<span class="op">.</span><span class="fu">property</span>(<span class="st">&quot;checked&quot;</span>)){      </span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>             <span class="cf">return</span>(nation<span class="op">.</span><span class="at">year</span><span class="op">==</span>year)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">else</span> {</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>               <span class="co">//Otherwise it doesn&#39;t matter what the year is</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>               <span class="cf">return</span>(<span class="kw">false</span>)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">update</span>()<span class="op">;</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p>So far, the update function is instantaneously updating the
+appearance of all circles when the data changes. If we want ppeople to
+watch circles change over time, this is neither pretty or helpful. To
+fix this, D3 also offers the <code>d3.transition</code> function to
+handle updating data. First, we need to define how to transition between
+data points. We might want to interpolate between to values linearly
+over the duration of 200 ms, like this:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>circles<span class="op">.</span><span class="fu">transition</span>()<span class="op">.</span><span class="fu">ease</span>(<span class="st">&quot;linear&quot;</span>)<span class="op">.</span><span class="fu">duration</span>(<span class="dv">200</span>)<span class="op">;</span></span></code></pre></div>
+<p>Now we know how it’s gonna happen, but we need to tell the transition
+what the actual change is. We can simply move the part of our code that
+updates the circle attributes from our <code>enter</code> function to
+our <code>transition</code> function.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>circles<span class="op">.</span><span class="fu">enter</span>()<span class="op">.</span><span class="fu">append</span>(<span class="st">&quot;circle&quot;</span>)<span class="op">.</span><span class="fu">attr</span>(<span class="st">&quot;class&quot;</span><span class="op">,</span><span class="st">&quot;data_point&quot;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">style</span>(<span class="st">&quot;fill&quot;</span><span class="op">,</span> <span class="kw">function</span>(d) { <span class="cf">return</span> <span class="fu">colorScale</span>(d<span class="op">.</span><span class="at">continent</span>)<span class="op">;</span> })<span class="op">;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>circles<span class="op">.</span><span class="fu">exit</span>()<span class="op">.</span><span class="fu">remove</span>()<span class="op">;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>circles<span class="op">.</span><span class="fu">transition</span>()<span class="op">.</span><span class="fu">ease</span>(<span class="st">&quot;linear&quot;</span>)<span class="op">.</span><span class="fu">duration</span>(<span class="dv">200</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">attr</span>(<span class="st">&quot;cx&quot;</span><span class="op">,</span> <span class="kw">function</span>(d) { <span class="cf">return</span> <span class="fu">xScale</span>(d<span class="op">.</span><span class="at">gdpPercap</span>)<span class="op">;</span> }) </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">attr</span>(<span class="st">&quot;cy&quot;</span><span class="op">,</span> <span class="kw">function</span>(d) { <span class="cf">return</span> <span class="fu">yScale</span>(d<span class="op">.</span><span class="at">lifeExp</span>)<span class="op">;</span> })</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">attr</span>(<span class="st">&quot;r&quot;</span><span class="op">,</span> <span class="kw">function</span>(d) {<span class="cf">return</span> <span class="fu">rScale</span>(d<span class="op">.</span><span class="at">pop</span>)})<span class="op">;</span></span></code></pre></div>
+<div id="other-transition-functions-you-might-want"
+class="callout panel panel-info">
+<section id="other-transition-functions-you-might-want"
+class="callout panel panel-info panel-heading">
+<h2 class="callout panel panel-info"><span
+class="glyphicon glyphicon-pushpin"></span>Other transition functions
+you might want</h2>
+</section>
 <div class="panel-body">
 <ul>
 <li>sin - applies the trigonometric function sin.</li>
 <li>exp - raises 2 to a power based on t.</li>
 <li>bounce - simulates a bouncy collision.</li>
-<li>elastic(a, p) - simulates an elastic band; may extend slightly beyond 0 and 1.</li>
-<li><a href="https://github.com/mbostock/d3/wiki/Transitions#d3_ease">more here</a></li>
+<li>elastic(a, p) - simulates an elastic band; may extend slightly
+beyond 0 and 1.</li>
+<li><a
+href="https://github.com/mbostock/d3/wiki/Transitions#d3_ease">more
+here</a></li>
 </ul>
 </div>
 </div>
 <div id="play-time" class="challenge panel panel-success">
-<div class="panel-heading">
-<h1><span class="glyphicon glyphicon-pencil"></span>Play time</h1>
-</div>
+<section id="play-time"
+class="challenge panel panel-success panel-heading">
+<h1 class="challenge panel panel-success"><span
+class="glyphicon glyphicon-pencil"></span>Play time</h1>
+</section>
 <div class="panel-body">
-<p>D3 is incredible versatile. Try out different transitions and if you have time, maybe try drawing rectangles instead of circles.</p>
+<p>D3 is incredible versatile. Try out different transitions and if you
+have time, maybe try drawing rectangles instead of circles.</p>
 </div>
 </div>
-<p>Next, we might want to create a tooltip. Let's go have a look at what's already out there. The creator of D3 has put up some code for pretty much everything you can imagine. The example for a simple tooltip can be found <a href="http://bl.ocks.org/biovisualize/1016860">here</a>. We need to first create the variable tooltip:</p>
-<pre class="js"><code>var tooltip = d3.select(&quot;body&quot;)
-    .append(&quot;div&quot;)
-    .style(&quot;position&quot;, &quot;absolute&quot;)  
-    .style(&quot;visibility&quot;, &quot;hidden&quot;);</code></pre>
-<p>and then create event listeners for moving the mouse into a circle and out of one. Different from the example on the web page, we want to display the specific country we are looking at. When we move the mouse, we want the tool tip to move with it. And the moment we leave a circle, we want the tool tip to hide again.</p>
-<pre class="js"><code>circles.enter().append(&quot;circle&quot;).attr(&quot;class&quot;,&quot;dot&quot;)                        
-            .style(&quot;fill&quot;, function(d) { return colorScale(d.region); })
-            .on(&quot;mouseover&quot;, function(d){return tooltip.style(&quot;visibility&quot;, &quot;visible&quot;).text(d.name);})
-            .on(&quot;mousemove&quot;, function(){return tooltip.style(&quot;top&quot;, (d3.event.pageY-10)+&quot;px&quot;).style(&quot;left&quot;,(d3.event.pageX+10)+&quot;px&quot;);})
-            .on(&quot;mouseout&quot;, function(){return tooltip.style(&quot;visibility&quot;, &quot;hidden&quot;);});</code></pre>
-<div id="we-have-used-some-special-objects-given-to-us-by-the-browser" class="callout panel panel-info">
-<div class="panel-heading">
-<h2><span class="glyphicon glyphicon-pushpin"></span>We have used some special objects given to us by the browser</h2>
-</div>
+<p>Next, we might want to create a tooltip. Let’s go have a look at
+what’s already out there. The creator of D3 has put up some code for
+pretty much everything you can imagine. The example for a simple tooltip
+can be found <a href="http://bl.ocks.org/biovisualize/1016860">here</a>.
+We need to first create the variable tooltip:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> tooltip <span class="op">=</span> d3<span class="op">.</span><span class="fu">select</span>(<span class="st">&quot;body&quot;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">append</span>(<span class="st">&quot;div&quot;</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">style</span>(<span class="st">&quot;position&quot;</span><span class="op">,</span> <span class="st">&quot;absolute&quot;</span>)  </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">style</span>(<span class="st">&quot;visibility&quot;</span><span class="op">,</span> <span class="st">&quot;hidden&quot;</span>)<span class="op">;</span></span></code></pre></div>
+<p>and then create event listeners for moving the mouse into a circle
+and out of one. Different from the example on the web page, we want to
+display the specific country we are looking at. When we move the mouse,
+we want the tool tip to move with it. And the moment we leave a circle,
+we want the tool tip to hide again.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>circles<span class="op">.</span><span class="fu">enter</span>()<span class="op">.</span><span class="fu">append</span>(<span class="st">&quot;circle&quot;</span>)<span class="op">.</span><span class="fu">attr</span>(<span class="st">&quot;class&quot;</span><span class="op">,</span><span class="st">&quot;dot&quot;</span>)                        </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="fu">style</span>(<span class="st">&quot;fill&quot;</span><span class="op">,</span> <span class="kw">function</span>(d) { <span class="cf">return</span> <span class="fu">colorScale</span>(d<span class="op">.</span><span class="at">region</span>)<span class="op">;</span> })</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="fu">on</span>(<span class="st">&quot;mouseover&quot;</span><span class="op">,</span> <span class="kw">function</span>(d){<span class="cf">return</span> tooltip<span class="op">.</span><span class="fu">style</span>(<span class="st">&quot;visibility&quot;</span><span class="op">,</span> <span class="st">&quot;visible&quot;</span>)<span class="op">.</span><span class="fu">text</span>(d<span class="op">.</span><span class="at">name</span>)<span class="op">;</span>})</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="fu">on</span>(<span class="st">&quot;mousemove&quot;</span><span class="op">,</span> <span class="kw">function</span>(){<span class="cf">return</span> tooltip<span class="op">.</span><span class="fu">style</span>(<span class="st">&quot;top&quot;</span><span class="op">,</span> (d3<span class="op">.</span><span class="at">event</span><span class="op">.</span><span class="at">pageY</span><span class="op">-</span><span class="dv">10</span>)<span class="op">+</span><span class="st">&quot;px&quot;</span>)<span class="op">.</span><span class="fu">style</span>(<span class="st">&quot;left&quot;</span><span class="op">,</span>(d3<span class="op">.</span><span class="at">event</span><span class="op">.</span><span class="at">pageX</span><span class="op">+</span><span class="dv">10</span>)<span class="op">+</span><span class="st">&quot;px&quot;</span>)<span class="op">;</span>})</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="fu">on</span>(<span class="st">&quot;mouseout&quot;</span><span class="op">,</span> <span class="kw">function</span>(){<span class="cf">return</span> tooltip<span class="op">.</span><span class="fu">style</span>(<span class="st">&quot;visibility&quot;</span><span class="op">,</span> <span class="st">&quot;hidden&quot;</span>)<span class="op">;</span>})<span class="op">;</span></span></code></pre></div>
+<div id="we-have-used-some-special-objects-given-to-us-by-the-browser"
+class="callout panel panel-info">
+<section
+id="we-have-used-some-special-objects-given-to-us-by-the-browser"
+class="callout panel panel-info panel-heading">
+<h2 class="callout panel panel-info"><span
+class="glyphicon glyphicon-pushpin"></span>We have used some special
+objects given to us by the browser</h2>
+</section>
 <div class="panel-body">
 <ul>
 <li>document.x - selecting things within the page (getElementById)</li>
-<li>console.x - interact with the browser's console (log)</li>
-<li>event.x - only interesting in the scope of an event like &quot;mouseover&quot;, &quot;mousemove&quot;, &quot;keydown&quot;. Returns information about the event (pageX - where on the page did this event occur?).</li>
+<li>console.x - interact with the browser’s console (log)</li>
+<li>event.x - only interesting in the scope of an event like
+“mouseover”, “mousemove”, “keydown”. Returns information about the event
+(pageX - where on the page did this event occur?).</li>
 </ul>
 </div>
 </div>
 <div id="style" class="challenge panel panel-success">
-<div class="panel-heading">
-<h1><span class="glyphicon glyphicon-pencil"></span>...style!</h1>
-</div>
+<section id="style" class="challenge panel panel-success panel-heading">
+<h1 class="challenge panel panel-success"><span
+class="glyphicon glyphicon-pencil"></span>…style!</h1>
+</section>
 <div class="panel-body">
 <p>Add axis labels and make the fonts pretty.</p>
 </div>
 </div>
-<p>By the end of this lesson, your page should look something like this:</p>
-<iframe src="http://alackles.github.io/D3-visualising-data/code/index10.html" width="1000" height="600"></iframe>
+<p>By the end of this lesson, your page should look something like
+this:</p>
+<iframe src="http://alackles.github.io/D3-visualising-data/code/index10.html" width="1000" height="600">
+</iframe>
         </div>
       </div>
       <div class="footer">

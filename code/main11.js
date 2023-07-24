@@ -40,7 +40,7 @@ map_canvas.append("rect")
     .attr("height", map_height);
 
 // Various scales. These domains make assumptions of data, naturally.
-var xScale = d3.scale.log(); // income
+var xScale = d3.scaleLog(); // income
 xScale.domain([250, 1e5]);
 xScale.range([0, canvas_width]);  
 
@@ -50,7 +50,7 @@ xScale.range([0, canvas_width]);
 // we set the range - range on the page
 // domain, range, log scale all determing data values are mapped to graph positions.
 
-var yScale = d3.scale.linear().domain([10, 85]).range([canvas_height, 0]);  // life expectancy
+var yScale = d3.scaleLinear().domain([10, 85]).range([canvas_height, 0]);  // life expectancy
 var colorScale = d3.scale.category10();
 
 // an alternative notation that d3 offers is to chain everything together using the dot-syntax 
@@ -60,7 +60,7 @@ var colorScale = d3.scale.category10();
 var xAxis = d3.svg.axis().orient("bottom").scale(xScale);
 var yAxis = d3.svg.axis().scale(yScale).orient("left");
 
-var rScale = d3.scale.sqrt().domain([0, 5e8]).range([0, 40]); // life expectancy
+var rScale = d3.scaleSqrt().domain([0, 5e8]).range([0, 40]); // life expectancy
 
 // Next step: push the axes into the chart
 // Add the x-axis.

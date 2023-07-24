@@ -19,15 +19,21 @@
   <body class="lesson">
     <div class="container card">
       <div class="banner">
+        <a href="http://software-carpentry.org" title="Software Carpentry">
+          <img alt="Software Carpentry banner" src="img/software-carpentry-banner.png" />
+        </a>
       </div>
       <div class="row">
         <div class="col-md-10 col-md-offset-1">
           <h1 class="title">D3 setup</h1>
-          <h2 class="subtitle">Setting up html for our data visualisation</h2>
+          <h2 class="subtitle">Setting up html for our data
+visualisation</h2>
 <div id="learning-objectives" class="objectives panel panel-warning">
-<div class="panel-heading">
-<h2><span class="glyphicon glyphicon-certificate"></span>Learning Objectives</h2>
-</div>
+<section id="learning-objectives"
+class="objectives panel panel-warning panel-heading">
+<h2 class="objectives panel panel-warning"><span
+class="glyphicon glyphicon-certificate"></span>Learning Objectives</h2>
+</section>
 <div class="panel-body">
 <ul>
 <li>Setting up an html file to contain the plot</li>
@@ -36,119 +42,201 @@
 </ul>
 </div>
 </div>
-<p>We've finally learned everything we need to know to start using D3. D3 is a JavaScript library. This means that we can use all of the JavaScript commands that we have already learned, but on top of these, there are a few new functions that will make our life easier.</p>
-<p>The main purpose of D3 is to create visualisations of data online. Because it uses JavaScript, it is possible to make graphs interactive!</p>
-<p>As a little refresher, we will repeat a little bit of html to set up our page.</p>
+<p>We’ve finally learned everything we need to know to start using D3.
+D3 is a JavaScript library. This means that we can use all of the
+JavaScript commands that we have already learned, but on top of these,
+there are a few new functions that will make our life easier.</p>
+<p>The main purpose of D3 is to create visualisations of data online.
+Because it uses JavaScript, it is possible to make graphs
+interactive!</p>
+<p>As a little refresher, we will repeat a little bit of html to set up
+our page.</p>
 <p>Create <code>index.html</code> containing the following:</p>
-<pre class="sourceCode html"><code class="sourceCode html"><span class="dt">&lt;!DOCTYPE </span>html<span class="dt">&gt;</span>
-<span class="kw">&lt;html&gt;</span>
-  <span class="kw">&lt;head&gt;</span>
-    <span class="kw">&lt;title&gt;</span>The Wealth <span class="er">&amp;</span> Health of Nations<span class="kw">&lt;/title&gt;</span>
-    <span class="kw">&lt;link</span><span class="ot"> rel=</span><span class="st">&quot;stylesheet&quot;</span><span class="ot"> type=</span><span class="st">&quot;text/css&quot;</span><span class="ot"> href=</span><span class="st">&quot;main.css&quot;</span> <span class="kw">/&gt;</span>
-  <span class="kw">&lt;/head&gt;</span>
-  <span class="kw">&lt;body&gt;</span>
-
-    <span class="kw">&lt;h1&gt;</span>The Wealth <span class="er">&amp;</span> Health of Nations<span class="kw">&lt;/h1&gt;</span>
-
-    <span class="kw">&lt;div</span><span class="ot"> id=</span><span class="st">&quot;chart_area&quot;</span><span class="kw">&gt;&lt;/div&gt;</span>
-
-    <span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">&quot;http://d3js.org/d3.v7.min.js&quot;</span><span class="kw">&gt;&lt;/script&gt;</span>
-    <span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">&quot;main.js&quot;</span><span class="kw">&gt;&lt;/script&gt;</span>
-  <span class="kw">&lt;/body&gt;</span>
-<span class="kw">&lt;/html&gt;</span></code></pre>
-<p>There are a few things in this file that look new: <code>&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;main.css&quot; /&gt;</code> is linking the local CSS file <code>main.css</code>(that can just be an empty file for now). <code>&lt;script src=&quot;main.js&quot;&gt;&lt;/script&gt;</code> is linking the JavaScript file, the file in which all the action will happen.</p>
-<p>Additionally, we now need to link d3 using <code>&lt;script src=&quot;http://d3js.org/d3.v7.min.js&quot;&gt;&lt;/script&gt;</code>. The order matters. Since code is executed sequentially and we want to use parts of the D3 library in our own script, we have to link to d3.js first.</p>
-<p>The last bit, that's important here is an HTML element (div) we create. We give it an id <code>chart_area</code>. This is the area we reserve for our pretty chart. We will use JavaScript (and D3) to fill it in.</p>
-<p>Now, let's write main.js.</p>
-<p>D3-specific functions can be called using a <code>d3.</code>-syntax.</p>
-<p>The first thing we need, is of course our data, which is stored at 'http://alackles.github.io/D3-visualising-data/resources/nations.csv'. D3 provides a handy function to read in <code>csv</code>-files:</p>
-<pre class="d3"><code>d3.csv("http://alackles.github.io/D3-visualising-data/resources/nations.csv").then(function(nations){ })</code></pre>
-<p>This line probably needs a little explanation and we'll go through it bit by bit:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode html"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;!DOCTYPE </span>html<span class="dt">&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;html&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;head&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;title&gt;</span>The Wealth <span class="er">&amp;</span> Health of Nations<span class="kw">&lt;/title&gt;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;link</span> <span class="er">rel</span><span class="ot">=</span><span class="st">&quot;stylesheet&quot;</span> <span class="er">type</span><span class="ot">=</span><span class="st">&quot;text/css&quot;</span> <span class="er">href</span><span class="ot">=</span><span class="st">&quot;main.css&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;/head&gt;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;body&gt;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;h1&gt;</span>The Wealth <span class="er">&amp;</span> Health of Nations<span class="kw">&lt;/h1&gt;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;div</span> <span class="er">id</span><span class="ot">=</span><span class="st">&quot;chart_area&quot;</span><span class="kw">&gt;&lt;/div&gt;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;script</span> <span class="er">src</span><span class="ot">=</span><span class="st">&quot;http://d3js.org/d3.v7.min.js&quot;</span><span class="kw">&gt;&lt;/script&gt;</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;script</span> <span class="er">src</span><span class="ot">=</span><span class="st">&quot;main.js&quot;</span><span class="kw">&gt;&lt;/script&gt;</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;/body&gt;</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/html&gt;</span></span></code></pre></div>
+<p>There are a few things in this file that look new:
+<code>&lt;link rel="stylesheet" type="text/css" href="main.css" /&gt;</code>
+is linking the local CSS file <code>main.css</code>(that can just be an
+empty file for now).
+<code>&lt;script src="main.js"&gt;&lt;/script&gt;</code> is linking the
+JavaScript file, the file in which all the action will happen.</p>
+<p>Additionally, we now need to link d3 using
+<code>&lt;script src="http://d3js.org/d3.v7.min.js"&gt;&lt;/script&gt;</code>.
+The order matters. Since code is executed sequentially and we want to
+use parts of the D3 library in our own script, we have to link to d3.js
+first.</p>
+<p>The last bit, that’s important here is an HTML element (div) we
+create. We give it an id <code>chart_area</code>. This is the area we
+reserve for our pretty chart. We will use JavaScript (and D3) to fill it
+in.</p>
+<p>Now, let’s write main.js.</p>
+<p>D3-specific functions can be called using a
+<code>d3.</code>-syntax.</p>
+<p>The first thing we need, is of course our data, which is stored at
+‘http://alackles.github.io/D3-visualising-data/resources/nations.csv’.
+D3 provides a handy function to read in <code>csv</code>-files:</p>
+<pre class="d3"><code>d3.csv(&quot;http://alackles.github.io/D3-visualising-data/resources/nations.csv&quot;).then(function(nations){ })</code></pre>
+<p>This line probably needs a little explanation and we’ll go through it
+bit by bit:</p>
 <ul>
-<li><code>d3.csv()</code> is called the function call. In this case, we have a function that reads in a json file, parses it, and is also able to do something with the parsed data on the way.</li>
-<li>The first argument <code>&quot;http://alackles.github.io/D3-visualising-data/resources/nations.csv&quot;</code> tells the function where to get the data we want to have parsed.</li>
-<li> <code>.then()</code> tells d3 to load the data in `d3.csv()` first, and then apply any manipulations we specify afterwards. This is new to newer version of D3.
-<li><code>function(...){...}</code> is called the callback function. It is a so-called 'inline' function, which means it has no name (we're only operating in the object space here). This also means we can't use this function anywhere else in our code. The code we put inside the curly brackets is the code that's run once d3.json() is called and the data is loaded.</li>
-<li>D3 assigns the name <code>nations</code> to the parsed object it returns. We can only use 'nations' within the callback function, this means our code only knows of <code>nations</code> inside the curly brackets. This means most of our visualization code will need to go inside the curly brackets.</li>
-<li>What seems unusual, but is actually quite common, is that this function call doesn't return anything. It is simply executed and displayed (if we tell it to), but no value is returned.</li>
+<li><code>d3.csv()</code> is called the function call. In this case, we
+have a function that reads in a json file, parses it, and is also able
+to do something with the parsed data on the way.</li>
+<li>The argument
+<code>"http://alackles.github.io/D3-visualising-data/resources/nations.csv"</code>
+tells the function where to get the data we want to have parsed.</li>
+<li><code>.then()</code> tells d3 to load the data in
+<code>d3.csv()</code> first, and then apply any manipulations we specify
+afterwards. This is new to newer version of D3.</li>
+<li><code>function(nations) {...}</code> is called the callback
+function. It is a so-called ‘inline’ function, which means it has no
+name (we’re only operating in the object space here). This also means we
+can’t use this function anywhere else in our code.</li>
+<li>The code we put inside the curly brackets is the code that’s run
+once d3.json() is called and the data is loaded.</li>
+<li>D3 assigns the name <code>nations</code> to the parsed object it
+returns. We can only use ‘nations’ within the callback function, this
+means our code only knows of <code>nations</code> inside the curly
+brackets. This means most of our visualization code will need to go
+inside the curly brackets.</li>
+<li>What seems unusual, but is actually quite common, is that this
+function call doesn’t return anything. It is simply executed and
+displayed (if we tell it to), but no value is returned.</li>
 </ul>
-<div id="what-else-can-i-read-in-conveniently" class="callout panel panel-info">
-<div class="panel-heading">
-<h2><span class="glyphicon glyphicon-pushpin"></span>What else can I read in conveniently?</h2>
-</div>
+<div id="what-else-can-i-read-in-conveniently"
+class="callout panel panel-info">
+<section id="what-else-can-i-read-in-conveniently"
+class="callout panel panel-info panel-heading">
+<h2 class="callout panel panel-info"><span
+class="glyphicon glyphicon-pushpin"></span>What else can I read in
+conveniently?</h2>
+</section>
 <div class="panel-body">
-<p>D3 offers the possibility to also read in tsv, json, and other types of files directly. See <a href="https://github.com/mbostock/d3/wiki/CSV">here</a> for an example.</p>
+<p>D3 offers the possibility to also read in tsv, json, and other types
+of files directly. See <a
+href="https://github.com/mbostock/d3/wiki/CSV">here</a> for an
+example.</p>
 </div>
 </div>
-<p>If we start by looking at <code>nations</code> with the <code>console.log()</code> function, we can see that D3 has interpretted the csv file relatively intelligently. It gave us an array of Javascript objects, each of which represents one row in the original file. These objects each have a property for each column. The names of these properties are based on the names that the header gave to each column in the csv. There's one thing that D3 isn't quite smart enough about, though - the types of the variables. It's assuming everything is a string - a series of characters. You can tell because there are quotation marks around the numbers. We can fix this by passing in another argument to <code>d3.csv()</code>. This argument will be another function, which will be called on each of the objects representing rows of the csv file:</p>
-<pre class="js"><code>var accessor = function(d){ 
-    return {
-    country: d.country,
-    year: +d.year,
-    pop: +d.pop,
-    continent: d.continent,
-    lifeExp: +d.lifeExp,
-    gdpPercap: +d.gdpPercap
-    };
-}</code></pre>
-<p>The <code>+</code> signs tell Javascript to interpret that variable as a number. We can stick this into the call to the <code>d3.csv()</code> function as the second argument:</p>
-<pre class="js"><code>
-d3.csv("http://alackles.github.io/D3-visualising-data/resources/nations.csv", accessor).
-  then(function) {
-   //Awesome visualizations here!
-  }
-</code></pre>
-<p>So naturally, the next step is to think about what we want to happen between the curly brackets. For now, we want to:</p>
+<p>If we start by looking at <code>nations</code> with the
+<code>console.log()</code> function, we can see that D3 has interpretted
+the csv file relatively intelligently. It gave us an array of Javascript
+objects, each of which represents one row in the original file. These
+objects each have a property for each column. The names of these
+properties are based on the names that the header gave to each column in
+the csv. There’s one thing that D3 isn’t quite smart enough about,
+though - the types of the variables. It’s assuming everything is a
+string - a series of characters. You can tell because there are
+quotation marks around the numbers. We can fix this by passing in
+another argument to <code>d3.csv()</code>. This argument will be another
+function, which will be called on each of the objects representing rows
+of the csv file:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> accessor <span class="op">=</span> <span class="kw">function</span>(d){ </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">country</span><span class="op">:</span> d<span class="op">.</span><span class="at">country</span><span class="op">,</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">year</span><span class="op">:</span> <span class="op">+</span>d<span class="op">.</span><span class="at">year</span><span class="op">,</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">pop</span><span class="op">:</span> <span class="op">+</span>d<span class="op">.</span><span class="at">pop</span><span class="op">,</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">continent</span><span class="op">:</span> d<span class="op">.</span><span class="at">continent</span><span class="op">,</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">lifeExp</span><span class="op">:</span> <span class="op">+</span>d<span class="op">.</span><span class="at">lifeExp</span><span class="op">,</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">gdpPercap</span><span class="op">:</span> <span class="op">+</span>d<span class="op">.</span><span class="at">gdpPercap</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    }<span class="op">;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>The <code>+</code> signs tell Javascript to interpret that variable
+as a number. We can stick this into the call to the
+<code>d3.csv()</code> function as the second argument:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>d3<span class="op">.</span><span class="fu">csv</span>(<span class="st">&quot;http://alackles.github.io/D3-visualising-data/resources/nations.csv&quot;</span><span class="op">,</span> accessor)<span class="op">.</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">then</span>(<span class="kw">function</span>) {</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>   <span class="co">//Awesome visualizations here!</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div>
+<p>So naturally, the next step is to think about what we want to happen
+between the curly brackets. For now, we want to:</p>
 <ul>
 <li>Link JavaScript to HTML page</li>
 <li>Insert an SVG canvas</li>
 <li>Create axes (x: income per capita, y: life expectancy)</li>
 <li>Display data points (scatter plot)</li>
 </ul>
-<p>First, let's draw a little schematic of how we want the page to be structured.</p>
+<p>First, let’s draw a little schematic of how we want the page to be
+structured.</p>
 <p><img src="img/chart_area.png" alt="What we want.." width="700" /></p>
-<p>We already set up our HTML page to contain a chart area. That's the space we want to fill now. We'll have a picture frame (an SVG-element), our drawing area (a g-element), and in that drawing area, we'll have separate elements for both axes and the area for our circles.</p>
+<p>We already set up our HTML page to contain a chart area. That’s the
+space we want to fill now. We’ll have a picture frame (an SVG-element),
+our drawing area (a g-element), and in that drawing area, we’ll have
+separate elements for both axes and the area for our circles.</p>
 <p>What we now want to end up with in our html document is this:</p>
-<pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;div</span><span class="ot"> id=</span><span class="st">&quot;chart_area&quot;</span><span class="kw">&gt;</span> <span class="kw">&lt;/div&gt;</span></code></pre>
-<p>But this time, we want to create these elements automatically using JavaScript only. First, we need to link the JavaScript and HTML environment so that we have writing access to the HTML. To do this, we use the <code>.select()</code>. This lets us grab an element by specifying its ID.</p>
-<pre class="js"><code>// Select the chart area by ID 
-var chart_area = d3.select(&quot;#chart_area&quot;);</code></pre>
-<p>Now we're setting up the grid by appending the chart area by the SVG picture frame.</p>
-<pre class="js"><code>var frame = chart_area.append(&quot;svg&quot;);</code></pre>
-<p>in the HTML file. We chose to append because we now have access to the SVG element without the need to seperately select it by ID.</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode html"><code class="sourceCode html"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;div</span> <span class="er">id</span><span class="ot">=</span><span class="st">&quot;chart_area&quot;</span><span class="kw">&gt;</span> <span class="kw">&lt;/div&gt;</span></span></code></pre></div>
+<p>But this time, we want to create these elements automatically using
+JavaScript only. First, we need to link the JavaScript and HTML
+environment so that we have writing access to the HTML. To do this, we
+use the <code>.select()</code>. This lets us grab an element by
+specifying its ID.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Select the chart area by ID </span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> chart_area <span class="op">=</span> d3<span class="op">.</span><span class="fu">select</span>(<span class="st">&quot;#chart_area&quot;</span>)<span class="op">;</span></span></code></pre></div>
+<p>Now we’re setting up the grid by appending the chart area by the SVG
+picture frame.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> frame <span class="op">=</span> chart_area<span class="op">.</span><span class="fu">append</span>(<span class="st">&quot;svg&quot;</span>)<span class="op">;</span></span></code></pre></div>
+<p>in the HTML file. We chose to append because we now have access to
+the SVG element without the need to seperately select it by ID.</p>
 <p>We also create the canvas inside the frame:</p>
-<pre class="js"><code>// Create canvas inside frame.
-var canvas = frame.append(&quot;g&quot;);</code></pre>
-<p>Let's set up the dimensions for our elements that we want to use:</p>
-<pre class="js"><code>// Set margins, width, and height.
-var margin = {top: 19.5, right: 19.5, bottom: 19.5, left: 39.5};
-var frame_width = 960;
-var frame_height = 350;
-var canvas_width = frame_width - margin.left - margin.right;
-var canvas_height = frame_height - margin.top - margin.bottom;</code></pre>
-<p>...and apply them to the actual elements:</p>
-<pre class="js"><code>// Set frame attributes width and height.
-frame.attr(&quot;width&quot;, frame_width);
-frame.attr(&quot;height&quot;, frame_height);</code></pre>
-<p>The canvas element will have to fit nicely into the frame. To make it fit, we set a transform attribute and use the translate function.</p>
-<pre class="js"><code>// Shift the canvas and make it slightly smaller than the svg canvas.
-canvas.attr(&quot;transform&quot;, &quot;translate(&quot; + margin.left + &quot;,&quot; + margin.top + &quot;)&quot;);</code></pre>
-<div id="adding-svgs-from-javascript-file" class="challenge panel panel-success">
-<div class="panel-heading">
-<h1><span class="glyphicon glyphicon-pencil"></span>Adding SVGs from JavaScript file</h1>
-</div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Create canvas inside frame.</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> canvas <span class="op">=</span> frame<span class="op">.</span><span class="fu">append</span>(<span class="st">&quot;g&quot;</span>)<span class="op">;</span></span></code></pre></div>
+<p>Let’s set up the dimensions for our elements that we want to use:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Set margins, width, and height.</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> margin <span class="op">=</span> {<span class="dt">top</span><span class="op">:</span> <span class="fl">19.5</span><span class="op">,</span> <span class="dt">right</span><span class="op">:</span> <span class="fl">19.5</span><span class="op">,</span> <span class="dt">bottom</span><span class="op">:</span> <span class="fl">19.5</span><span class="op">,</span> <span class="dt">left</span><span class="op">:</span> <span class="fl">39.5</span>}<span class="op">;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> frame_width <span class="op">=</span> <span class="dv">960</span><span class="op">;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> frame_height <span class="op">=</span> <span class="dv">350</span><span class="op">;</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> canvas_width <span class="op">=</span> frame_width <span class="op">-</span> margin<span class="op">.</span><span class="at">left</span> <span class="op">-</span> margin<span class="op">.</span><span class="at">right</span><span class="op">;</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> canvas_height <span class="op">=</span> frame_height <span class="op">-</span> margin<span class="op">.</span><span class="at">top</span> <span class="op">-</span> margin<span class="op">.</span><span class="at">bottom</span><span class="op">;</span></span></code></pre></div>
+<p>…and apply them to the actual elements:</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode js"><code class="sourceCode javascript"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Set frame attributes width and height.</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>frame<span class="op">.</span><span class="fu">attr</span>(<span class="st">&quot;width&quot;</span><span class="op">,</span> frame_width)<span class="op">;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>frame<span class="op">.</span><span class="fu">attr</span>(<span class="st">&quot;height&quot;</span><span class="op">,</span> frame_height)<span class="op">;</span></span></code></pre></div>
+<p>The canvas element will have to fit nicely into the frame. To make it
+fit, we set a transform attribute and use the translate function.</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode js"><code class="sourceCode javascript"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Shift the canvas and make it slightly smaller than the svg canvas.</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>canvas<span class="op">.</span><span class="fu">attr</span>(<span class="st">&quot;transform&quot;</span><span class="op">,</span> <span class="st">&quot;translate(&quot;</span> <span class="op">+</span> margin<span class="op">.</span><span class="at">left</span> <span class="op">+</span> <span class="st">&quot;,&quot;</span> <span class="op">+</span> margin<span class="op">.</span><span class="at">top</span> <span class="op">+</span> <span class="st">&quot;)&quot;</span>)<span class="op">;</span></span></code></pre></div>
+<div id="adding-svgs-from-javascript-file"
+class="challenge panel panel-success">
+<section id="adding-svgs-from-javascript-file"
+class="challenge panel panel-success panel-heading">
+<h1 class="challenge panel panel-success"><span
+class="glyphicon glyphicon-pencil"></span>Adding SVGs from JavaScript
+file</h1>
+</section>
 <div class="panel-body">
-<ol style="list-style-type: decimal">
+<ol type="1">
 <li>Add a SVG circle element to the frame.</li>
-<li>Once the circle reference is obtained, make the radius 40px, the border black and the colour green.</li>
+<li>Once the circle reference is obtained, make the radius 40px, the
+border black and the colour green.</li>
 </ol>
-<p>HINT: You can use the <code>attr</code> method on the circle object obtained.</p>
+<p>HINT: You can use the <code>attr</code> method on the circle object
+obtained.</p>
 </div>
 </div>
         </div>
       </div>
       <div class="footer">
-        <a class="label swc-blue-bg" href="https://github.com/alackles/D3-visualising-data">Source</a>
+        <a class="label swc-blue-bg" href="http://software-carpentry.org">Software Carpentry</a>
+        <a class="label swc-blue-bg" href="https://github.com/swcarpentry/lesson-template">Source</a>
+        <a class="label swc-blue-bg" href="mailto:admin@software-carpentry.org">Contact</a>
         <a class="label swc-blue-bg" href="LICENSE.html">License</a>
       </div>
     </div>
