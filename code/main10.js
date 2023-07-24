@@ -11,7 +11,7 @@ var accessor = function(d){
     };
 }
 
-d3.csv("http://alackles.github.io/D3-visualising-data/resources/nations.csv", accessor, function(nations) {
+d3.csv("http://alackles.github.io/D3-visualising-data/resources/nations.csv", accessor).then( function(nations) {
 	var filtered_nations = nations.map(function(nation) { return nation;});
 	var year = parseInt(document.getElementById("year_slider").value);
 
@@ -59,8 +59,8 @@ d3.csv("http://alackles.github.io/D3-visualising-data/resources/nations.csv", ac
 
 
 	// Creating the x & y axes.
-	var xAxis = d3.svg.axis().orient("bottom").scale(xScale);
-    var yAxis = d3.svg.axis().scale(yScale).orient("left");
+	var xAxis = d3.axisBottom(xScale);
+	var yAxis = d3.axisLeft(yScale);
 
 	var rScale = d3.scaleSqrt().domain([0, 5e8]).range([0, 40]); // life expectancy
 

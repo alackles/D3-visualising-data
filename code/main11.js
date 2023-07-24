@@ -51,14 +51,14 @@ xScale.range([0, canvas_width]);
 // domain, range, log scale all determing data values are mapped to graph positions.
 
 var yScale = d3.scaleLinear().domain([10, 85]).range([canvas_height, 0]);  // life expectancy
-var colorScale = d3.scale.category10();
+var colorScale = d3.scaleOrdinal(10);
 
 // an alternative notation that d3 offers is to chain everything together using the dot-syntax 
 // (you'll see this a lot). The order is mostly arbitrary. 
 
 // Creating the x & y axes.
-var xAxis = d3.svg.axis().orient("bottom").scale(xScale);
-var yAxis = d3.svg.axis().scale(yScale).orient("left");
+var xAxis = d3.axisBottom(xScale);
+var yAxis = d3.axisLeft(yScale);
 
 var rScale = d3.scaleSqrt().domain([0, 5e8]).range([0, 40]); // life expectancy
 
